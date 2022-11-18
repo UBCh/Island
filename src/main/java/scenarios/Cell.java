@@ -1,4 +1,6 @@
-import entities.RandomNumbers;
+package scenarios;
+
+import entities.entitiy.RandomNumbers;
 import entities.entitiy.Animal;
 import entities.entitiy.Appetite;
 import entities.entitiy.LifeSensor;
@@ -6,26 +8,25 @@ import entities.herbivores.*;
 import entities.plants.Plant;
 import entities.predators.*;
 
-import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Cell {
 
     static Ark ark;
-    public static Cell instance;
+//    public static scenarios.Cell instance;
 
       public CopyOnWriteArrayList<Plant> plants = new CopyOnWriteArrayList<>();
       public CopyOnWriteArrayList<Animal> zoo = new CopyOnWriteArrayList<>();
 
-//    private Cell() {
+//    private scenarios.Cell() {
 //    populate();
 //    }
 //
-//    public static Cell getInstance(Ark ark) {
+//    public static scenarios.Cell getInstance(scenarios.Ark ark) {
 //	if (instance == null) {
 //	    setArk(ark);
-//	    instance = new Cell();
+//	    instance = new scenarios.Cell();
 //	    var d=instance;
 //	}
 //	return instance;
@@ -109,9 +110,9 @@ public class Cell {
 	return null;
     }
 
-    public CopyOnWriteArrayList<Animal> getZoo() {
-	return zoo;
-    }
+//    public CopyOnWriteArrayList<Animal> getZoo() {
+//	return zoo;
+//    }
 
     public CopyOnWriteArrayList<Plant> getPlants() {
 	return plants;

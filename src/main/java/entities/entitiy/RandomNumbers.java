@@ -1,4 +1,4 @@
-package entities;
+package entities.entitiy;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ThreadLocalRandom;
@@ -16,6 +16,7 @@ public class RandomNumbers implements Callable {
     public Integer call() throws Exception {
 	try {
 	    int bound = max;
+	    if (bound<2){return bound;}
 	    result = ThreadLocalRandom.current().nextInt(1,bound);
 
 	}

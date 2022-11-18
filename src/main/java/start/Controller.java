@@ -1,3 +1,7 @@
+package start;
+
+import simulation.Simulation;
+
 public class Controller {
 
 
@@ -7,7 +11,7 @@ public class Controller {
        config.setConfigurations();
         Simulation simulation=new Simulation();
 
-        int countStep=simulation.playingField.getDurationOfTheSimulationCycle();
+        int countStep= simulation.getPlayingField().getDurationOfTheSimulationCycle();
 
         for (int i=0; i<countStep; i++){
 

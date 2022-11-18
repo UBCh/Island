@@ -1,3 +1,5 @@
+package scenarios;
+
 import entities.entitiy.Animal;
 import entities.herbivores.*;
 import entities.plants.Plant;

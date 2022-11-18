@@ -1,6 +1,6 @@
 package entities.herbivores;
 
-import entities.RandomNumbers;
+import entities.entitiy.RandomNumbers;
 import entities.entitiy.Animal;
 import entities.entitiy.Appetite;
 import entities.entitiy.LifeSensor;

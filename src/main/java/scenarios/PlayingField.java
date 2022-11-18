@@ -1,9 +1,8 @@
-import entities.RandomNumbers;
+package scenarios;
+
+import entities.entitiy.RandomNumbers;
 import entities.entitiy.Animal;
 import entities.entitiy.Direction;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class PlayingField {
 
@@ -14,15 +13,10 @@ public class PlayingField {
     static public String conditionForStoppingTheSimulation = "";
     static public int durationOfTheSimulationCycle = 0;
 
-    static public Cell cell;
+//    static public scenarios.Cell cell;
     public static Cell[][] playField;
-
-    private String [] resultSimulation =new String[0];
     ResultReport resultReport = new ResultReport();
-
-    public void setResultSimulation(String[] resultSimulation) {
-	this.resultSimulation = resultSimulation;
-    }
+    private String[] resultSimulation = new String[0];
 
     private PlayingField() throws Exception {
 	createPlayField();
@@ -56,9 +50,9 @@ public class PlayingField {
 	conditionForStoppingTheSimulation = forStoppingTheSimulation;
     }
 
-    public static void setCell(Cell c) {
-	cell = c;
-    }
+//    public static void setCell(scenarios.Cell c) {
+//	cell = c;
+//    }
 
     private static void createPlayField() throws Exception {
 	playField = new Cell[sizeOfTheIslandIsVertical][sizeOfTheIslandIsHorizontal];
@@ -70,6 +64,9 @@ public class PlayingField {
 	}
     }
 
+    public void setResultSimulation(String[] resultSimulation) {
+	this.resultSimulation = resultSimulation;
+    }
 
     public void moveAround() throws Exception {
 	for (int i = 0; i < sizeOfTheIslandIsVertical; i++) {
@@ -147,33 +144,33 @@ public class PlayingField {
 
     public void report() {
 
-	String[] result=new String[17*sizeOfTheIslandIsVertical*sizeOfTheIslandIsHorizontal];
-	String[] tmp=new String[17];
+	String[] result = new String[17 * sizeOfTheIslandIsVertical * sizeOfTheIslandIsHorizontal];
+	String[] tmp = new String[17];
 	for (int i = 0; i < sizeOfTheIslandIsVertical; i++) {
 	    for (int j = 0; j < sizeOfTheIslandIsHorizontal; j++) {
-		tmp=playField[i][j].countLiving(i,j);
+		tmp = playField[i][j].countLiving(i, j);
 		getResult(tmp);
-					    }
+	    }
 	}
 	resultReport.writingToFile(resultSimulation);
     }
 
-     private void getResult(String[] tmp){
-     String[] strings=new String[resultSimulation.length+tmp.length];
-	 for (int i = 0; i < resultSimulation.length; i++) {
-	     strings[i]=resultSimulation[i];
-	 }
-	 int i=resultSimulation.length;
-for (int j = 0; j<tmp.length; j++){
-       strings[i]=tmp[j]; i++;
-}
-	 setResultSimulation(strings);
-     }
-
+    private void getResult(String[] tmp) {
+	String[] strings = new String[resultSimulation.length + tmp.length];
+	for (int i = 0; i < resultSimulation.length; i++) {
+	    strings[i] = resultSimulation[i];
+	}
+	int i = resultSimulation.length;
+	for (int j = 0; j < tmp.length; j++) {
+	    strings[i] = tmp[j];
+	    i++;
+	}
+	setResultSimulation(strings);
+    }
 
 
 //    public void report() {
-//	ResultReport resultReport = new ResultReport();
+//	scenarios.ResultReport resultReport = new scenarios.ResultReport();
 //	for (int i = 0; i < sizeOfTheIslandIsVertical; i++) {
 //	    for (int j = 0; j < sizeOfTheIslandIsHorizontal; j++) {
 //		String[] toStringForWrite = playField[i][j].countLiving(i,j);

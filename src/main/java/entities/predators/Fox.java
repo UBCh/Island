@@ -1,7 +1,10 @@
 package entities.predators;
 
 import entities.entitiy.*;
-import entities.herbivores.*;
+import entities.herbivores.Caterpillar;
+import entities.herbivores.Duck;
+import entities.herbivores.Mouse;
+import entities.herbivores.Rabbit;
 
 import java.util.TreeMap;
 import java.util.concurrent.CopyOnWriteArrayList;

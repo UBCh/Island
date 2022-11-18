@@ -1,3 +1,9 @@
+package start;
+
+import scenarios.Ark;
+import scenarios.Cell;
+import scenarios.PlayingField;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -106,14 +112,14 @@ public class Config {
 	ark.setRabbit(numberOfCubsInRabbit, numberOfRabbitAtTheStart);
 	ark.setSheep(numberOfCubsInSheep, numberOfSheepAtTheStart);
 	ark.setWolf(numberOfCubsInWolf, numberOfWolfAtTheStart);
-//	Cell cell=Cell.getInstance(ark);
+//	scenarios.Cell cell=scenarios.Cell.getInstance(ark);
 //	cell.populate();
 	Cell.setArk(ark);
 	PlayingField.setSizeOfTheIslandIsHorizontal(sizeOfTheIslandIsHorizontal);
 	PlayingField.setSizeOfTheIslandIsVertical(sizeOfTheIslandIsVertical);
 	PlayingField.setConditionForStoppingTheSimulation(conditionForStoppingTheSimulation);
 	PlayingField.setDurationOfTheSimulationCycle(durationOfTheSimulationCycle);
-//	PlayingField.setCell(cell);
+//	scenarios.PlayingField.setCell(cell);
 	PlayingField playingField=PlayingField.getInstance();
     }
 
