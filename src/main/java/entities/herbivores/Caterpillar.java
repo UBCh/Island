@@ -17,7 +17,7 @@ public class Caterpillar  extends Animal {
 
     public Specifications specifications;
     public Appetite appetite;
-    int numberOfCubs=30;
+    int numberOfCubs=2;
     double mass=0.01;
     double howMuchFood=1;
     double foodMass=0;
@@ -46,6 +46,11 @@ public class Caterpillar  extends Animal {
 	this.numberOfStart=numberOfStart;
 	this.probabilityOfEating=setProbabilityOfEating();
     }
+    @Override
+    public void moveAround() {
+	appetite=Appetite.HUNGRY;
+    }
+
     @Override
     public  TreeMap<Integer,String> getProbabilityOfEating() {
 	return probabilityOfEating;

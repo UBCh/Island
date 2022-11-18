@@ -83,7 +83,7 @@ public class Animal {
     public void moveAround() {
     }
 
-    public CopyOnWriteArrayList<Animal> replicate() {
+    public CopyOnWriteArrayList<Animal> replicate() throws Exception {
 	return null;
     }
 

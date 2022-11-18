@@ -16,7 +16,7 @@ public class Deer extends Animal {
 
     Specifications specifications;
     Appetite appetite;
-     int numberOfCubs=1;
+    int numberOfCubs=1;
     double mass=300;
     double howMuchFood=5;
     double foodMass=0;
@@ -42,7 +42,10 @@ public class Deer extends Animal {
 	this.numberOfStart=numberOfStart;
 	this.probabilityOfEating=setProbabilityOfEating();
     }
-
+    @Override
+    public void moveAround() {
+	appetite=Appetite.HUNGRY;
+    }
     @Override
     public void setAppetite(Appetite appetite) {
 	this.appetite = appetite;
@@ -119,10 +122,9 @@ public class Deer extends Animal {
 	}
     }
 
-    @Override
-    public void moveAround() {
 
-    }
+
+
 
     @Override
     public CopyOnWriteArrayList<Animal> replicate() {

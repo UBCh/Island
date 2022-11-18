@@ -125,7 +125,7 @@ public class BoaConstrictor extends Animal {
     }
     @Override
     public void moveAround() {
-	moveAround();
+	appetite=Appetite.HUNGRY;
     }
 
     @Override

@@ -11,7 +11,7 @@ public class Controller {
 
         for (int i=0; i<countStep; i++){
 
-        simulation.stepSimulation();
+       simulation.stepSimulation();
 
         }
     }

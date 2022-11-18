@@ -122,7 +122,7 @@ public class Rabbit extends Animal {
 
     @Override
     public void moveAround() {
-	super.moveAround();
+	appetite=Appetite.HUNGRY;
     }
 
     @Override

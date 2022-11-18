@@ -2,6 +2,9 @@ import entities.RandomNumbers;
 import entities.entitiy.Animal;
 import entities.entitiy.Direction;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PlayingField {
 
 
@@ -14,7 +17,14 @@ public class PlayingField {
     static public Cell cell;
     public static Cell[][] playField;
 
-    private PlayingField() {
+    private String [] resultSimulation =new String[0];
+    ResultReport resultReport = new ResultReport();
+
+    public void setResultSimulation(String[] resultSimulation) {
+	this.resultSimulation = resultSimulation;
+    }
+
+    private PlayingField() throws Exception {
 	createPlayField();
     }
 
@@ -26,7 +36,7 @@ public class PlayingField {
 	durationOfTheSimulationCycle = duration;
     }
 
-    public static PlayingField getInstance() {
+    public static PlayingField getInstance() throws Exception {
 	if (instance == null) {
 
 	    instance = new PlayingField();
@@ -50,12 +60,12 @@ public class PlayingField {
 	cell = c;
     }
 
-    private static void createPlayField() {
+    private static void createPlayField() throws Exception {
 	playField = new Cell[sizeOfTheIslandIsVertical][sizeOfTheIslandIsHorizontal];
 
 	for (int i = 0; i < sizeOfTheIslandIsVertical; i++) {
 	    for (int j = 0; j < sizeOfTheIslandIsHorizontal; j++) {
-		playField[i][j] = cell;
+		playField[i][j] = new Cell();
 	    }
 	}
     }
@@ -80,7 +90,7 @@ public class PlayingField {
 			    }
 			}
 			case down -> {
-			    if (i + distance < sizeOfTheIslandIsVertical - 1) {
+			    if (i + distance <= sizeOfTheIslandIsVertical - 1) {
 				iNew = i + distance;
 			    } else {
 				iNew = sizeOfTheIslandIsVertical - 1;
@@ -94,7 +104,7 @@ public class PlayingField {
 			    }
 			}
 			case right -> {
-			    if (jNew + distance < sizeOfTheIslandIsHorizontal - 1) {
+			    if (jNew + distance <= sizeOfTheIslandIsHorizontal - 1) {
 				jNew = j + distance;
 			    } else {
 				jNew = sizeOfTheIslandIsHorizontal - 1;
@@ -136,13 +146,40 @@ public class PlayingField {
 
 
     public void report() {
-	ResultReport resultReport = new ResultReport();
+
+	String[] result=new String[17*sizeOfTheIslandIsVertical*sizeOfTheIslandIsHorizontal];
+	String[] tmp=new String[17];
 	for (int i = 0; i < sizeOfTheIslandIsVertical; i++) {
 	    for (int j = 0; j < sizeOfTheIslandIsHorizontal; j++) {
-		String[] toStringForWrite = playField[i][j].countLiving();
-		resultReport.writingToFile(toStringForWrite);
-	    }
+		tmp=playField[i][j].countLiving(i,j);
+		getResult(tmp);
+					    }
 	}
+	resultReport.writingToFile(resultSimulation);
     }
+
+     private void getResult(String[] tmp){
+     String[] strings=new String[resultSimulation.length+tmp.length];
+	 for (int i = 0; i < resultSimulation.length; i++) {
+	     strings[i]=resultSimulation[i];
+	 }
+	 int i=resultSimulation.length;
+for (int j = 0; j<tmp.length; j++){
+       strings[i]=tmp[j]; i++;
+}
+	 setResultSimulation(strings);
+     }
+
+
+
+//    public void report() {
+//	ResultReport resultReport = new ResultReport();
+//	for (int i = 0; i < sizeOfTheIslandIsVertical; i++) {
+//	    for (int j = 0; j < sizeOfTheIslandIsHorizontal; j++) {
+//		String[] toStringForWrite = playField[i][j].countLiving(i,j);
+//		resultReport.writingToFile(toStringForWrite);
+//	    }
+//	}
+//    }
 
 }

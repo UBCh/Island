@@ -121,9 +121,8 @@ public class Fox extends Animal {
     }
     @Override
     public void moveAround() {
-	super.moveAround();
+	appetite=Appetite.HUNGRY;
     }
-
     @Override
     public CopyOnWriteArrayList<Animal> replicate() {
 	appetite = Appetite.HUNGRY;

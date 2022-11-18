@@ -43,7 +43,7 @@ public class Config {
     int numberOfCubsInRabbit = 0;
     int numberOfCubsInSheep = 0;
 
-    public  void setConfigurations() {
+    public  void setConfigurations() throws Exception {
 
 	try {
 	    fis = new FileInputStream(pathFile);
@@ -106,13 +106,14 @@ public class Config {
 	ark.setRabbit(numberOfCubsInRabbit, numberOfRabbitAtTheStart);
 	ark.setSheep(numberOfCubsInSheep, numberOfSheepAtTheStart);
 	ark.setWolf(numberOfCubsInWolf, numberOfWolfAtTheStart);
-	Cell cell=Cell.getInstance(ark);
-	cell.populate();
+//	Cell cell=Cell.getInstance(ark);
+//	cell.populate();
+	Cell.setArk(ark);
 	PlayingField.setSizeOfTheIslandIsHorizontal(sizeOfTheIslandIsHorizontal);
 	PlayingField.setSizeOfTheIslandIsVertical(sizeOfTheIslandIsVertical);
 	PlayingField.setConditionForStoppingTheSimulation(conditionForStoppingTheSimulation);
 	PlayingField.setDurationOfTheSimulationCycle(durationOfTheSimulationCycle);
-	PlayingField.setCell(cell);
+//	PlayingField.setCell(cell);
 	PlayingField playingField=PlayingField.getInstance();
     }
 

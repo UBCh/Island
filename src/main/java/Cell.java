@@ -1,3 +1,4 @@
+import entities.RandomNumbers;
 import entities.entitiy.Animal;
 import entities.entitiy.Appetite;
 import entities.entitiy.LifeSensor;
@@ -5,6 +6,7 @@ import entities.herbivores.*;
 import entities.plants.Plant;
 import entities.predators.*;
 
+import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -16,20 +18,25 @@ public class Cell {
       public CopyOnWriteArrayList<Plant> plants = new CopyOnWriteArrayList<>();
       public CopyOnWriteArrayList<Animal> zoo = new CopyOnWriteArrayList<>();
 
-    private Cell() {
-    populate();
+//    private Cell() {
+//    populate();
+//    }
+//
+//    public static Cell getInstance(Ark ark) {
+//	if (instance == null) {
+//	    setArk(ark);
+//	    instance = new Cell();
+//	    var d=instance;
+//	}
+//	return instance;
+//    }
+
+
+    public Cell() throws Exception {
+	populate();
     }
 
-    public static Cell getInstance(Ark ark) {
-	if (instance == null) {
-	    setArk(ark);
-	    instance = new Cell();
-	    var d=instance;
-	}
-	return instance;
-    }
-
-    private static void setArk(Ark a) {
+    public static void setArk(Ark a) {
 	ark = a;
     }
 
@@ -49,12 +56,12 @@ public class Cell {
     }
 
 
-    public void populate() {
+    public void populate() throws Exception {
 	CopyOnWriteArrayList<Animal> set = ark.getAnimals();
 	int quantity=0;
 	CopyOnWriteArrayList<Animal> result = new CopyOnWriteArrayList<>();
 	for (Animal o : set) {
-	     quantity = o.getNumberOfStart();
+	     quantity = determineCount(o);
 	    for (int i = 1; i <= quantity; i++) {
 		result.add(getAnimal(o));
 	    }
@@ -123,57 +130,10 @@ public class Cell {
 	}
     }}
 
-//    private double getFood(Animal animal){
-//	//	находим количество вариантов еды для animal
-//	int sizeMap=animal.getProbabilityOfEating().size();
-//	//	находим ключ мапы- соответсвующий самомому большому проценту вероятности быть съеденным из всех вариантов еды
-//	int key=animal.getProbabilityOfEating().lastKey();
-//	//	находим "имя"  еды по ключу
-//	String value=animal.getProbabilityOfEating().get(key);
-//	double food=0;
-//
-//	if (checkAvailability(value)){
-//	    //	если такой вид еды есть среди живности в клетке
-//	    if (value.equals(Plant.name)){
-//		//	если value-растение
-//		food= plants.get(0).getMass();
-//		plants.remove(0);
-//	    }
-//	    else {
-//		//	если value-животное
-//		for (Animal a: zoo ) {
-//		    if (a.getName().equals(value)){
-//			food=a.getMass();
-//			zoo.remove(a);
-//			break;
-//		    }
-//		}
-//
-//	    }
-//	}
-//	else {
-////	если самого очевидного вида еды нет среди живности в клетке
-//	    var f=animal.appetite;
-//	  while (animal.getAppetite()==Appetite.HUNGRY) {
-//	      for (int i = 0; i < sizeMap - 1; i++) {
-//		  key = animal.getProbabilityOfEating().floorEntry(key - 1).getKey();
-//		  value = animal.getProbabilityOfEating().get(key);
-//		  if (checkAvailability(value)) {
-//		      for (Animal a : zoo) {
-//			  if (a.getName().equals(value)) {
-//			      food = a.getMass();
-//			      zoo.remove(a);
-//			      return food;
-//			  }
-//		      }
-//		  } else if (!checkAvailability(value)) {
-//		      break;
-//		  }
-//	      }
-//	  }
-//	}
-//	return food;
-//    }
+    private int determineCount(Animal animal) throws Exception {
+	RandomNumbers randomNumbers = new RandomNumbers(animal.getNumberOfStart() + 1);
+	return randomNumbers.call();
+    }
 
     private double getFood(Animal animal){
 	//	находим количество вариантов еды для animal
@@ -248,7 +208,7 @@ public class Cell {
 	return false;
     }
 
-    public void replicate(){
+    public void replicate() throws Exception {
 	CopyOnWriteArrayList< Animal> choice=new CopyOnWriteArrayList<>();
 	 choice.addAll(zoo);
 	for (Animal animal: choice) {
@@ -280,22 +240,62 @@ public class Cell {
 	return false;
     }
 
-   public String[] countLiving(){
-    String [] result=new  String [16];
-    int i=0;
-       for (Animal a: zoo) {
-	result [i] =a.getName()+ " - " +counter(a);
-	 i++;
-	       }
-         result[result.length-1]=Plant.name+" - " +plants.size();
-	return result;
+//   public String[] countLiving(int vertical, int horizontal){
+//       String [] result=new  String [17];
+//       CopyOnWriteArrayList<Animal> zooFake=new CopyOnWriteArrayList<>();
+//      zooFake.addAll(zoo);
+//      result[result.length-1]="cell with coordinates____________"+ vertical +" =vertical" +horizontal+" +horizontal";
+//       int i=result.length-2;
+//       for (Animal a: ark.getAnimals()) {
+//	   result [i] =a.getName()+ " - " +counter(a);
+//	   zooFake.stream().forEach(x->{
+//	       if (x.getName().equals(a)){zooFake.remove(x);}
+//	   });
+//	   i--;
+//
+//       }
+//       result[0]=Plant.name+" - " +plants.size();
+//
+//       return result;
+//   }
+
+    public String[] countLiving(int vertical, int horizontal){
+	String[] result=new String[17];
+	CopyOnWriteArrayList<Animal> zooFake=new CopyOnWriteArrayList<>();
+	cleanUp();
+	zooFake.addAll(zoo);
+	result[0]="cell with coordinates____________"+ vertical +" =vertical  " +horizontal+" =horizontal";
+	result[1]=Plant.name+" - " +plants.size();
+	int i=2;
+	for (Animal a: ark.getAnimals()) {
+	    result[i]=a.getName()+ " - " +counter(a);
+	    i++;
+	    zooFake.stream().forEach(x->{
+		if (x.getName().equals(a)){zooFake.remove(x);}
+	    });
+	 	}
+		return result;
     }
+
+
+
+
 
     private int counter(Animal animal){
-	return zoo.stream().filter(x-> x.getName().equals(animal.getName())).toArray().length;
 
+	return zoo.stream()
+		.filter(x-> x.getName()
+			.equals(animal.getName()))
+		.toArray()
+		.length;
     }
 
+    public void cleanUp(){
+	zoo.stream().forEach(x->{
+
+	   if(x.getLifeSensor()==LifeSensor.DEAD){zoo.remove(x);}
+	});
+    }
 
 }
 

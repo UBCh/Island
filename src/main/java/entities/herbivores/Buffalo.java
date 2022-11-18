@@ -1,5 +1,6 @@
 package entities.herbivores;
 
+import entities.RandomNumbers;
 import entities.entitiy.Animal;
 import entities.entitiy.Appetite;
 import entities.entitiy.LifeSensor;
@@ -24,7 +25,7 @@ public class Buffalo extends Animal {
     int numberOfCubs = 1;
     double mass = 700;
 //    double howMuchFood = 100;
-double howMuchFood = 2;
+double howMuchFood = 100;
     double foodMass = 0;
     int numberOfAnimalsInCage = 10;
     int speed = 3;
@@ -137,8 +138,10 @@ double howMuchFood = 2;
     }
 
     @Override
-    public CopyOnWriteArrayList<Animal> replicate() {
+    public CopyOnWriteArrayList<Animal> replicate() throws Exception {
 	CopyOnWriteArrayList<Animal> animals = new CopyOnWriteArrayList<Animal>();
+	RandomNumbers randomNumbers = new RandomNumbers(numberOfCubs+1);
+	numberOfCubs=randomNumbers.call();;
 	for (int i = 0; i < numberOfCubs; i++) {
 	    animals.add(new Buffalo(numberOfCubs, numberOfStart));
 	}
