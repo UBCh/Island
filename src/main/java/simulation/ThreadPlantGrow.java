@@ -2,22 +2,23 @@ package simulation;
 
 import scenarios.Cell;
 
-public class TreadReplicate extends Thread{
+public class ThreadPlantGrow extends Thread{
+
+
 
 
     Cell cell;
 
-    public TreadReplicate(Cell cell) {
+    public ThreadPlantGrow(Cell cell) {
 	this.cell = cell;
     }
 
     @Override
     public void run( ) {
 	try {
-	    cell.replicate();
+	    cell.plantGrow();
 	} catch (Exception e) {
 	    e.printStackTrace();
 	}
     }
-
 }

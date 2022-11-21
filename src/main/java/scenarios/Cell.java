@@ -119,17 +119,29 @@ public class Cell {
     }
 
     //    покормить
-    public void eat(){
-	for (Animal animal: zoo){
-	       switch (animal.getAppetite()){
+//    public void eat(){
+//	for (Animal animal: zoo){
+//	       switch (animal.getAppetite()){
+//		case HUNGRY -> {
+//		 while (animal.getAppetite()== Appetite.HUNGRY){
+//		    double getFood=getFood(animal);
+//		if (getFood==0) {animal.setLifeSensor(LifeSensor.DEAD); break;}
+//		    animal.eatUp(getFood);}
+//	    }
+//	}
+//    }}
+
+    public void eat(Animal animal){
+	    switch (animal.getAppetite()){
 		case HUNGRY -> {
-		 while (animal.getAppetite()== Appetite.HUNGRY){
-		    double getFood=getFood(animal);
-		if (getFood==0) {animal.setLifeSensor(LifeSensor.DEAD); break;}
-		    animal.eatUp(getFood);}
+		    while (animal.getAppetite()== Appetite.HUNGRY){
+			double getFood=getFood(animal);
+			if (getFood==0) {animal.setLifeSensor(LifeSensor.DEAD); break;}
+			animal.eatUp(getFood);}
+		}
 	    }
-	}
-    }}
+    }
+
 
     private int determineCount(Animal animal) throws Exception {
 	RandomNumbers randomNumbers = new RandomNumbers(animal.getNumberOfStart() + 1);
@@ -209,20 +221,30 @@ public class Cell {
 	return false;
     }
 
-    public void replicate() throws Exception {
-	CopyOnWriteArrayList< Animal> choice=new CopyOnWriteArrayList<>();
-	 choice.addAll(zoo);
-	for (Animal animal: choice) {
-	       if (animal.getAppetite()==Appetite.WELL_FED){
-		   if (findACouple(animal)){
-		   zoo.addAll(animal.replicate());} }
-	}
-	if (plants.size()!=0){
-	    for (Plant plant: plants){
-		plants.add(plant.growing());
-	    }}
-    }
+//    public void replicate() throws Exception {
+//	CopyOnWriteArrayList< Animal> choice=new CopyOnWriteArrayList<>();
+//	 choice.addAll(zoo);
+//	for (Animal animal: choice) {
+//	       if (animal.getAppetite()==Appetite.WELL_FED){
+//		   if (findACouple(animal)){
+//		   zoo.addAll(animal.replicate());} }
+//	}
+//
+//    }
 
+    public void replicate(Animal animal) throws Exception {
+	    if (animal.getAppetite()==Appetite.WELL_FED){
+		if (findACouple(animal)){
+		    zoo.addAll(animal.replicate());} }
+	    }
+
+
+// отдельный метод рост растений
+public void plantGrow() throws Exception{
+	if (plants.size()!=0){
+    for (Plant plant: plants){
+	plants.add(plant.growing());
+    }}}
 
 
     private boolean findACouple(Animal animal){
@@ -262,18 +284,18 @@ public class Cell {
 
     public String[] countLiving(int vertical, int horizontal){
 	String[] result=new String[17];
-	CopyOnWriteArrayList<Animal> zooFake=new CopyOnWriteArrayList<>();
+//	CopyOnWriteArrayList<Animal> zooFake=new CopyOnWriteArrayList<>();
 	cleanUp();
-	zooFake.addAll(zoo);
+//	zooFake.addAll(zoo);
 	result[0]="cell with coordinates____________"+ vertical +" =vertical  " +horizontal+" =horizontal";
 	result[1]=Plant.name+" - " +plants.size();
 	int i=2;
 	for (Animal a: ark.getAnimals()) {
 	    result[i]=a.getName()+ " - " +counter(a);
 	    i++;
-	    zooFake.stream().forEach(x->{
-		if (x.getName().equals(a)){zooFake.remove(x);}
-	    });
+//	    zooFake.stream().forEach(x->{
+//		if (x.getName().equals(a.getName())){zooFake.remove(x);}
+//	    });
 	 	}
 		return result;
     }

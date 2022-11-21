@@ -27,6 +27,7 @@ public class Ark {
     Wolf wolf;
 
  public CopyOnWriteArrayList<Animal> animals=new CopyOnWriteArrayList<>();
+    public CopyOnWriteArrayList<Plant> plants = new CopyOnWriteArrayList<>();
 
     public Ark() {
 
@@ -91,7 +92,7 @@ public class Ark {
 
        public void setPlant(int numberOfStart) {
 	this.plant = new Plant(numberOfStart );
-    }
+	    }
 
       public void setBear(int numberOfCubsIn,int numberOfStart) {
 	this.bear = new Bear(numberOfCubsIn, numberOfStart);
@@ -120,4 +121,7 @@ public class Ark {
 	this.wolf = new Wolf(numberOfCubsIn,numberOfStart);
 	animals.add(wolf);
     }
+
+
+
 }

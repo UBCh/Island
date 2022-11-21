@@ -14,7 +14,7 @@ public class PlayingField {
     static public int durationOfTheSimulationCycle = 0;
 
 //    static public scenarios.Cell cell;
-    public static Cell[][] playField;
+    public static Cell[][] cellSet;
     ResultReport resultReport = new ResultReport();
     private String[] resultSimulation = new String[0];
 
@@ -55,11 +55,11 @@ public class PlayingField {
 //    }
 
     private static void createPlayField() throws Exception {
-	playField = new Cell[sizeOfTheIslandIsVertical][sizeOfTheIslandIsHorizontal];
+	cellSet = new Cell[sizeOfTheIslandIsVertical][sizeOfTheIslandIsHorizontal];
 
 	for (int i = 0; i < sizeOfTheIslandIsVertical; i++) {
 	    for (int j = 0; j < sizeOfTheIslandIsHorizontal; j++) {
-		playField[i][j] = new Cell();
+		cellSet[i][j] = new Cell();
 	    }
 	}
     }
@@ -68,41 +68,84 @@ public class PlayingField {
 	this.resultSimulation = resultSimulation;
     }
 
-    public void moveAround() throws Exception {
-	for (int i = 0; i < sizeOfTheIslandIsVertical; i++) {
-	    for (int j = 0; j < sizeOfTheIslandIsHorizontal; j++) {
-		Cell current = playField[i][j];
-		var set = current.zoo;
-		for (Animal animal : set) {
-		    int distance = determineDistance(animal);
-		    playField[i][j].zoo.remove(animal);
-		    int iNew = i;
-		    int jNew = j;
+//    public void moveAround() throws Exception {
+//	for (int i = 0; i < sizeOfTheIslandIsVertical; i++) {
+//	    for (int j = 0; j < sizeOfTheIslandIsHorizontal; j++) {
+//		Cell current = cellSet[i][j];
+//		var set = current.zoo;
+//		for (Animal animal : set) {
+//		    int distance = determineDistance(animal);
+//		    cellSet[i][j].zoo.remove(animal);
+//		    int iNew = i;
+//		    int jNew = j;
+//		    switch (determineDirection()) {
+//			case up -> {
+//			    if (i - distance > 0) {
+//				iNew = i - distance;
+//			    } else {
+//				iNew = 0;
+//			    }
+//			}
+//			case down -> {
+//			    if (i + distance <= sizeOfTheIslandIsVertical - 1) {
+//				iNew = i + distance;
+//			    } else {
+//				iNew = sizeOfTheIslandIsVertical - 1;
+//			    }
+//			}
+//			case left -> {
+//			    if (j - distance > 0) {
+//				jNew = j - distance;
+//			    } else {
+//				jNew = 0;
+//			    }
+//			}
+//			case right -> {
+//			    if (jNew + distance <= sizeOfTheIslandIsHorizontal - 1) {
+//				jNew = j + distance;
+//			    } else {
+//				jNew = sizeOfTheIslandIsHorizontal - 1;
+//			    }
+//			}
+//		    }
+//		    moveToAnotherCell(iNew, jNew, animal);
+//		}
+//	    }
+//	}
+//
+//    }
+
+    public void moveAround( Animal animal,int startY, int startX) throws Exception {
+		Cell current = cellSet[startY][startX];
+		   int distance = determineDistance(animal);
+		   current.zoo.remove(animal);
+		    int iNew = startY;
+		    int jNew = startX;
 		    switch (determineDirection()) {
 			case up -> {
-			    if (i - distance > 0) {
-				iNew = i - distance;
+			    if (startY - distance > 0) {
+				iNew = startY - distance;
 			    } else {
 				iNew = 0;
 			    }
 			}
 			case down -> {
-			    if (i + distance <= sizeOfTheIslandIsVertical - 1) {
-				iNew = i + distance;
+			    if (startY + distance <= sizeOfTheIslandIsVertical - 1) {
+				iNew = startY + distance;
 			    } else {
 				iNew = sizeOfTheIslandIsVertical - 1;
 			    }
 			}
 			case left -> {
-			    if (j - distance > 0) {
-				jNew = j - distance;
+			    if (startX - distance > 0) {
+				jNew = startX - distance;
 			    } else {
 				jNew = 0;
 			    }
 			}
 			case right -> {
 			    if (jNew + distance <= sizeOfTheIslandIsHorizontal - 1) {
-				jNew = j + distance;
+				jNew = startX + distance;
 			    } else {
 				jNew = sizeOfTheIslandIsHorizontal - 1;
 			    }
@@ -110,14 +153,10 @@ public class PlayingField {
 		    }
 		    moveToAnotherCell(iNew, jNew, animal);
 		}
-	    }
-	}
-
-    }
 
 
     private void moveToAnotherCell(int vertical, int horizontal, Animal animal) {
-	playField[vertical][horizontal].zoo.add(animal);
+	cellSet[vertical][horizontal].zoo.add(animal);
     }
 
     private int determineDistance(Animal animal) throws Exception {
@@ -144,11 +183,11 @@ public class PlayingField {
 
     public void report() {
 
-	String[] result = new String[17 * sizeOfTheIslandIsVertical * sizeOfTheIslandIsHorizontal];
-	String[] tmp = new String[17];
+//	String[] result = new String[17 * sizeOfTheIslandIsVertical * sizeOfTheIslandIsHorizontal];
+	String[] tmp;
 	for (int i = 0; i < sizeOfTheIslandIsVertical; i++) {
 	    for (int j = 0; j < sizeOfTheIslandIsHorizontal; j++) {
-		tmp = playField[i][j].countLiving(i, j);
+		tmp = cellSet[i][j].countLiving(i, j);
 		getResult(tmp);
 	    }
 	}
@@ -173,7 +212,7 @@ public class PlayingField {
 //	scenarios.ResultReport resultReport = new scenarios.ResultReport();
 //	for (int i = 0; i < sizeOfTheIslandIsVertical; i++) {
 //	    for (int j = 0; j < sizeOfTheIslandIsHorizontal; j++) {
-//		String[] toStringForWrite = playField[i][j].countLiving(i,j);
+//		String[] toStringForWrite = cellSet[i][j].countLiving(i,j);
 //		resultReport.writingToFile(toStringForWrite);
 //	    }
 //	}

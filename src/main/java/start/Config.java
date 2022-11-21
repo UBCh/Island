@@ -13,10 +13,10 @@ public class Config {
     String pathFile = "src/main/resources/config.properties";
     FileInputStream fis;
     Properties property = new Properties();
-    int sizeOfTheIslandIsHorizontal = 0;
-    int sizeOfTheIslandIsVertical = 0;
-    String conditionForStoppingTheSimulation = "";
-    int durationOfTheSimulationCycle = 0;
+   public static int sizeOfTheIslandIsHorizontal = 0;
+   public static int sizeOfTheIslandIsVertical = 0;
+   public String conditionForStoppingTheSimulation = "";
+   public static int durationOfTheSimulationCycle = 0;
     int numberOfBuffaloAtTheStart = 0;
     int numberOfCaterpillarAtTheStart = 0;
     int numberOfDeerAtTheStart = 0;
