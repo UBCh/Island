@@ -1,10 +1,6 @@
 package entities.herbivores;
 
-import entities.entitiy.RandomNumbers;
-import entities.entitiy.Animal;
-import entities.entitiy.Appetite;
-import entities.entitiy.LifeSensor;
-import entities.entitiy.Specifications;
+import entities.entitiy.*;
 import entities.plants.Plant;
 
 import java.util.TreeMap;
@@ -13,33 +9,29 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class Buffalo extends Animal {
 
     public static String name = "Buffalo";
+    private Specifications specifications;
+    private Appetite appetite;
+    private LifeSensor lifeSensor;
+    private int numberOfCubs = 1;
+    private double mass = 700;
+    private double howMuchFood = 100;
+    private double foodMass = 0;
+    private int numberOfAnimalsInCage = 10;
+    private int speed = 3;
+    private int numberOfStart;
+    private TreeMap<Integer, String> probabilityOfEating;
 
-    public String getName() {
-	return name;
-    }
-
-
-    public Specifications specifications;
-    public Appetite appetite;
-    public LifeSensor lifeSensor;
-    int numberOfCubs = 1;
-    double mass = 700;
-//    double howMuchFood = 100;
-double howMuchFood = 100;
-    double foodMass = 0;
-    int numberOfAnimalsInCage = 10;
-    int speed = 3;
-    int numberOfStart;
-    TreeMap<Integer, String> probabilityOfEating;
-
-    public Buffalo(int numberOfCubsIn, int numberOfStart) {
+    public Buffalo(int numberOfCubsIn, int numberOfStart) throws InterruptedException {
 	this.specifications = Specifications.PEACEFUL;
 	this.appetite = Appetite.HUNGRY;
 	this.lifeSensor = LifeSensor.ALIVE;
 	this.numberOfCubs = numberOfCubsIn;
 	this.numberOfStart = numberOfStart;
 	this.probabilityOfEating = setProbabilityOfEating();
-	this.name = "Buffalo";
+	    }
+
+    public String getName() {
+	return name;
     }
 
     @Override
@@ -97,7 +89,8 @@ double howMuchFood = 100;
 
     @Override
     public void toDie() {
-	lifeSensor = LifeSensor.DEAD;
+        lifeSensor = LifeSensor.DEAD;
+	System.out.println("сдох  "+name);
     }
 
     @Override
@@ -144,6 +137,7 @@ double howMuchFood = 100;
 	numberOfCubs=randomNumbers.call();;
 	for (int i = 0; i < numberOfCubs; i++) {
 	    animals.add(new Buffalo(numberOfCubs, numberOfStart));
+	    System.out.println("убусь до соплей");
 	}
 	appetite = Appetite.HUNGRY;
 	foodMass = 0;

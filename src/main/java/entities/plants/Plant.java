@@ -9,12 +9,15 @@ public class Plant {
 
     public static String name="Plant";
 
-    public String getName() {
-	return name;
+    public Plant() {
     }
 
-    public Plant( int numberOfPlantAtTheStart ) {
+    public Plant(int numberOfPlantAtTheStart ) {
 	this.numberOfStart=numberOfPlantAtTheStart;
+    }
+
+    public String getName() {
+	return name;
     }
 
     public Plant growing() {

@@ -1,6 +1,9 @@
 package entities.herbivores;
 
-import entities.entitiy.*;
+import entities.entitiy.Animal;
+import entities.entitiy.Appetite;
+import entities.entitiy.LifeSensor;
+import entities.entitiy.Specifications;
 import entities.plants.Plant;
 
 import java.util.TreeMap;
@@ -8,42 +11,41 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Goat extends Animal {
 
- public   static String name="Goat";
+    public static String name = "Goat";
+    private TreeMap<Integer, String> probabilityOfEating;
+    private LifeSensor lifeSensor;
+    private Specifications specifications;
+    private Appetite appetite;
+    private int numberOfCubs = 3;
+    private double mass = 60;
+    private double howMuchFood = 5;
+    private double foodMass = 0;
+    private int numberOfAnimalsInCage = 140;
+    private int speed = 3;
+    private int numberOfStart;
 
     public String getName() {
 	return name;
     }
 
-
-    Specifications specifications;
-    Appetite appetite;
-    int numberOfCubs=3;
-    double mass=60;
-    double howMuchFood=5;
-    double foodMass=0;
-    int numberOfAnimalsInCage=140;
-    int speed=3;
-    int numberOfStart;
-
-    TreeMap <Integer,String> probabilityOfEating ;
-
-    private  TreeMap<Integer,String> setProbabilityOfEating(){
-	TreeMap<Integer,String> result= new TreeMap<>();
-	result.putIfAbsent(100,Plant.name);
-	return result;
-    }
-    @Override
-    public void setAppetite(Appetite appetite) {
-	this.appetite = appetite;
-    }
-
-    public Goat(int numberOfCubsIn,int numberOfStart) {
+    public Goat(int numberOfCubsIn, int numberOfStart) {
 	this.specifications = Specifications.PEACEFUL;
 	this.appetite = Appetite.HUNGRY;
 	this.lifeSensor=LifeSensor.ALIVE;
 	this.numberOfCubs=numberOfCubsIn;
 	this.numberOfStart=numberOfStart;
 	this.probabilityOfEating=setProbabilityOfEating();
+    }
+
+    @Override
+    public void setAppetite(Appetite appetite) {
+	this.appetite = appetite;
+    }
+
+    private TreeMap<Integer, String> setProbabilityOfEating() {
+	TreeMap<Integer, String> result = new TreeMap<>();
+	result.putIfAbsent(100, Plant.name);
+	return result;
     }
 
     public TreeMap<Integer,String> getProbabilityOfEating() {
@@ -65,10 +67,10 @@ public class Goat extends Animal {
 	return lifeSensor;
     }
 
-
     @Override
     public void toDie() {
-	lifeSensor=LifeSensor.DEAD;
+	lifeSensor = LifeSensor.DEAD;
+	System.out.println("сдох   "+name);
     }
 
     @Override

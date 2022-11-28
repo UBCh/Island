@@ -1,6 +1,9 @@
 package entities.herbivores;
 
-import entities.entitiy.*;
+import entities.entitiy.Animal;
+import entities.entitiy.Appetite;
+import entities.entitiy.LifeSensor;
+import entities.entitiy.Specifications;
 import entities.plants.Plant;
 
 import java.util.TreeMap;
@@ -8,50 +11,50 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Deer extends Animal {
 
-    public static String name="Deer";
+    public static String name = "Deer";
+    private Specifications specifications;
+    private Appetite appetite;
+    private int numberOfCubs=1;
+    private double mass=300;
+    private double howMuchFood=5;
+    private  double foodMass=0;
+    private int numberOfAnimalsInCage=20;
+    private  int speed=4;
+    public LifeSensor lifeSensor;
+    private int numberOfStart;
+    private    TreeMap<Integer,String> probabilityOfEating ;
 
-    public  String getName() {
+
+    public Deer(int numberOfCubsIn, int numberOfStart) {
+	this.specifications = Specifications.PEACEFUL;
+	this.appetite = Appetite.HUNGRY;
+	this.lifeSensor = LifeSensor.ALIVE;
+	this.numberOfCubs = numberOfCubsIn;
+	this.numberOfStart = numberOfStart;
+	this.probabilityOfEating = setProbabilityOfEating();
+    }
+
+    public String getName() {
 	return name;
     }
 
-    Specifications specifications;
-    Appetite appetite;
-    int numberOfCubs=1;
-    double mass=300;
-    double howMuchFood=5;
-    double foodMass=0;
-    int numberOfAnimalsInCage=20;
-    int speed=4;
-    LifeSensor lifeSensor;
-    int numberOfStart;
-
-    TreeMap<Integer,String> probabilityOfEating ;
-
-    private  TreeMap<Integer,String> setProbabilityOfEating(){
-	TreeMap<Integer,String> result= new TreeMap<>();
-	result.putIfAbsent(100,Plant.name);
+    private TreeMap<Integer, String> setProbabilityOfEating() {
+	TreeMap<Integer, String> result = new TreeMap<>();
+	result.putIfAbsent(100, Plant.name);
 	return result;
     }
 
-
-    public Deer(int numberOfCubsIn,int numberOfStart) {
-	this.specifications = Specifications.PEACEFUL;
-	this.appetite = Appetite.HUNGRY;
-	this.lifeSensor=LifeSensor.ALIVE;
-	this.numberOfCubs=numberOfCubsIn;
-	this.numberOfStart=numberOfStart;
-	this.probabilityOfEating=setProbabilityOfEating();
-    }
     @Override
     public void moveAround() {
-	appetite=Appetite.HUNGRY;
+	appetite = Appetite.HUNGRY;
     }
+
     @Override
     public void setAppetite(Appetite appetite) {
 	this.appetite = appetite;
     }
 
-    public  TreeMap<Integer,String> getProbabilityOfEating() {
+    public TreeMap<Integer, String> getProbabilityOfEating() {
 	return probabilityOfEating;
     }
 
@@ -83,8 +86,10 @@ public class Deer extends Animal {
 
     @Override
     public void toDie() {
-	lifeSensor=LifeSensor.DEAD;
+	lifeSensor = LifeSensor.DEAD;
+	System.out.println("сдох   "+name);
     }
+
     @Override
     public int getNumberOfAnimalsInCage() {
 	return numberOfAnimalsInCage;
@@ -114,17 +119,12 @@ public class Deer extends Animal {
     public void eatUp(double massOfTheVictim) {
 	if (appetite == Appetite.HUNGRY) {
 	    foodMass = foodMass + massOfTheVictim;
-
 	}
 	if (foodMass >= howMuchFood) {
 	    appetite = Appetite.WELL_FED;
 	    return;
 	}
     }
-
-
-
-
 
     @Override
     public CopyOnWriteArrayList<Animal> replicate() {

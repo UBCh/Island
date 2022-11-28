@@ -85,8 +85,10 @@ public class Bear extends Animal {
 
     @Override
     public void toDie() {
-	lifeSensor=LifeSensor.DEAD;
+	lifeSensor = LifeSensor.DEAD;
+	System.out.println("сдох   "+name);
     }
+
     @Override
     public int getNumberOfAnimalsInCage() {
 	return numberOfAnimalsInCage;
@@ -142,6 +144,7 @@ public class Bear extends Animal {
 	CopyOnWriteArrayList<Animal>  animals = new CopyOnWriteArrayList<Animal>();
 	for (int i = 0; i <numberOfCubs ; i++) {
 	    animals.add(new Bear(numberOfCubs, numberOfStart));
+	    System.out.println("убусь до соплей");
 	}
 	appetite = Appetite.HUNGRY;
 	foodMass = 0;

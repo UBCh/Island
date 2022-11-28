@@ -2,23 +2,24 @@ package simulation;
 
 import scenarios.Cell;
 
-public class ThreadPlantGrow extends Thread{
+public class ThreadPlantGrow extends Thread {
 
 
-
-
-    Cell cell;
+     private final Cell cell;
 
     public ThreadPlantGrow(Cell cell) {
 	this.cell = cell;
     }
 
+
     @Override
-    public void run( ) {
+    public void run() {
 	try {
-	    cell.plantGrow();
+	cell.plantGrow();
+	    Thread.interrupted();
 	} catch (Exception e) {
 	    e.printStackTrace();
 	}
     }
+
 }

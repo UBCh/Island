@@ -81,9 +81,11 @@ public class Fox extends Animal {
     public LifeSensor getLifeSensor() {
 	return lifeSensor;
     }
+
     @Override
     public void toDie() {
-	lifeSensor=LifeSensor.DEAD;
+	lifeSensor = LifeSensor.DEAD;
+	System.out.println("сдох   "+name);
     }
 
     @Override

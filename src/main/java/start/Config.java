@@ -16,7 +16,7 @@ public class Config {
    public static int sizeOfTheIslandIsHorizontal = 0;
    public static int sizeOfTheIslandIsVertical = 0;
    public String conditionForStoppingTheSimulation = "";
-   public static int durationOfTheSimulationCycle = 0;
+    public static int cycleTime = 0;
     int numberOfBuffaloAtTheStart = 0;
     int numberOfCaterpillarAtTheStart = 0;
     int numberOfDeerAtTheStart = 0;
@@ -49,15 +49,31 @@ public class Config {
     int numberOfCubsInRabbit = 0;
     int numberOfCubsInSheep = 0;
 
-    public  void setConfigurations() throws Exception {
+
+    public Config() throws Exception {
+	setConfigurations();
+    }
+
+    public static void setSize(int siz) {
+	sizeOfTheIslandIsHorizontal = siz;
+	sizeOfTheIslandIsVertical = siz;
+    }
+
+    public static void setCycleTime(int сycle) {
+	cycleTime = сycle;
+    }
+
+    public void setConfigurations() throws Exception {
 
 	try {
 	    fis = new FileInputStream(pathFile);
 	    property.load(fis);
-	    sizeOfTheIslandIsHorizontal = Integer.parseInt(property.getProperty("sizeOfTheIslandIsHorizontal"));
-	    sizeOfTheIslandIsVertical = Integer.parseInt(property.getProperty("sizeOfTheIslandIsVertical"));
+//	    закоментировано- установка размеров игрового поля из config.properties, т.к. в действующей модели- размера поля параметризован
+//	    sizeOfTheIslandIsHorizontal = Integer.parseInt(property.getProperty("sizeOfTheIslandIsHorizontal"));
+//	    sizeOfTheIslandIsVertical = Integer.parseInt(property.getProperty("sizeOfTheIslandIsVertical"));
 	    conditionForStoppingTheSimulation = property.getProperty("conditionForStoppingTheSimulation");
-	    durationOfTheSimulationCycle = Integer.parseInt(property.getProperty("durationOfTheSimulationCycle"));
+//	    закоментировано- установка времени 1 цикла симуляции из config.properties, т.к. в действующей модели- длина цикла - параметризована
+//	    cycleTime = Integer.parseInt(property.getProperty("cycleTime"));
 	    numberOfBuffaloAtTheStart = Integer.parseInt(property.getProperty("numberOfBuffaloAtTheStart"));
 	    numberOfCaterpillarAtTheStart = Integer.parseInt(property.getProperty("numberOfCaterpillarAtTheStart"));
 	    numberOfDeerAtTheStart = Integer.parseInt(property.getProperty("numberOfDeerAtTheStart"));
@@ -112,15 +128,12 @@ public class Config {
 	ark.setRabbit(numberOfCubsInRabbit, numberOfRabbitAtTheStart);
 	ark.setSheep(numberOfCubsInSheep, numberOfSheepAtTheStart);
 	ark.setWolf(numberOfCubsInWolf, numberOfWolfAtTheStart);
-//	scenarios.Cell cell=scenarios.Cell.getInstance(ark);
-//	cell.populate();
 	Cell.setArk(ark);
 	PlayingField.setSizeOfTheIslandIsHorizontal(sizeOfTheIslandIsHorizontal);
 	PlayingField.setSizeOfTheIslandIsVertical(sizeOfTheIslandIsVertical);
 	PlayingField.setConditionForStoppingTheSimulation(conditionForStoppingTheSimulation);
-	PlayingField.setDurationOfTheSimulationCycle(durationOfTheSimulationCycle);
-//	scenarios.PlayingField.setCell(cell);
-	PlayingField playingField=PlayingField.getInstance();
+	PlayingField.setCycleTime(cycleTime);
+
     }
 
 }

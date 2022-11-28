@@ -5,29 +5,25 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Animal {
     public static String name;
+    private Specifications specifications;
+    private Appetite appetite;
+   private LifeSensor lifeSensor;
+   private int numberOfStart;
+   private double foodMass;
+    private int numberOfCubs;
+   private TreeMap<Integer, String> probabilityOfEating;
 
     public void setAppetite(Appetite appetite) {
 	this.appetite = appetite;
     }
 
-    public Specifications specifications;
-    public Appetite appetite;
-
     public void setLifeSensor(LifeSensor lifeSensor) {
 	this.lifeSensor = lifeSensor;
     }
 
-    public LifeSensor lifeSensor;
-    int numberOfStart;
-    double foodMass;
-    int numberOfCubs;
-    TreeMap<Integer, String> probabilityOfEating;
-
     public String getName() {
 	return name;
     }
-
-
 
     public TreeMap<Integer, String> getProbabilityOfEating() {
 	return probabilityOfEating;
@@ -87,7 +83,7 @@ public class Animal {
 	return null;
     }
 
-    public void toDie() {
+    public void toDie()  {
     }
 
 }

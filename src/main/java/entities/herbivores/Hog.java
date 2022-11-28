@@ -1,6 +1,9 @@
 package entities.herbivores;
 
-import entities.entitiy.*;
+import entities.entitiy.Animal;
+import entities.entitiy.Appetite;
+import entities.entitiy.LifeSensor;
+import entities.entitiy.Specifications;
 import entities.plants.Plant;
 
 import java.util.TreeMap;
@@ -9,33 +12,32 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class Hog extends Animal {
 
 
-   public static String name="Hog";
+    public static String name = "Hog";
+    private static int numberOfCubs = 2;
+    private Specifications specifications;
+    private Appetite appetite;
+    private double mass = 400;
+    private double howMuchFood = 5;
+    private double foodMass = 0;
+    private int numberOfAnimalsInCage = 50;
+    private int speed = 2;
+    private LifeSensor lifeSensor;
+    private int numberOfStart;
 
-     public String getName() {
+    private TreeMap<Integer, String> probabilityOfEating;
+
+    public String getName() {
 	return name;
     }
 
-
-    Specifications specifications;
-    Appetite appetite;
-   static int numberOfCubs=2;
-    double mass=400;
-    double howMuchFood=5;
-   double foodMass=0;
-    int numberOfAnimalsInCage=50;
-    int speed=2;
-    LifeSensor lifeSensor;
-    int numberOfStart;
-
-    TreeMap <Integer,String> probabilityOfEating ;
-
-    private  TreeMap <Integer,String> setProbabilityOfEating(){
-	TreeMap <Integer,String> result= new TreeMap<>();
-	result.putIfAbsent(100,Plant.name);
-	result.putIfAbsent(90,Caterpillar.name);
-	result.putIfAbsent(50,Mouse.name);
+    private TreeMap<Integer, String> setProbabilityOfEating() {
+	TreeMap<Integer, String> result = new TreeMap<>();
+	result.putIfAbsent(100, Plant.name);
+	result.putIfAbsent(90, Caterpillar.name);
+	result.putIfAbsent(50, Mouse.name);
 	return result;
     }
+
     @Override
     public void setAppetite(Appetite appetite) {
 	this.appetite = appetite;
@@ -81,11 +83,12 @@ public class Hog extends Animal {
     }
 
 
-
     @Override
     public void toDie() {
-	lifeSensor=LifeSensor.DEAD;
+	lifeSensor = LifeSensor.DEAD;
+	System.out.println("сдох   "+name);
     }
+
     @Override
     public int getNumberOfAnimalsInCage() {
 	return numberOfAnimalsInCage;

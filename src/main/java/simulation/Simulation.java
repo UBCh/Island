@@ -1,6 +1,7 @@
 package simulation;
 
 import entities.entitiy.Animal;
+import graphicInterface.PanelOfDeath;
 import scenarios.PlayingField;
 
 import java.util.concurrent.ExecutorService;
@@ -8,60 +9,71 @@ import java.util.concurrent.Executors;
 
 public class Simulation {
 
-    public PlayingField playingField = PlayingField.getInstance();
-    int x = PlayingField.cellSet.length;
-    int y = PlayingField.cellSet[0].length;
-    boolean simulationLivesOn = true;
-    ExecutorService service = Executors.newFixedThreadPool(10);
+    public static PlayingField playingField;
 
+    static {
+        try {
+            playingField = PlayingField.getInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
+    static int x = PlayingField.cellSet.length;
+    static int y = PlayingField.cellSet[0].length;
+    static boolean simulationLivesOn = true;
 
-    public Simulation() throws Exception {
+    static ExecutorService serviceLife;
+    static ExecutorService servicePlants;
+
+    public Simulation()  {
 
     }
 
-    public void stepSimulation() throws Exception {
+
+    public static void stepSimulation() throws Exception {
+        simulationLivesOn = true;
+        serviceLife = Executors.newFixedThreadPool(100);
+        servicePlants = Executors.newFixedThreadPool(10);
+        simulationCycle();
         while (simulationLivesOn) {
-            threadPlantGrow();
-            treadLifeSimulation();
-            simulationCycle();
-        }
-        service.shutdown();
+         treadLifeSimulation();
+               }
+        servicePlants.shutdownNow();
+        serviceLife.shutdownNow();
         playingField.report();
     }
 
 
-    public void threadPlantGrow() {
-        for (int i = 0; i < x; i++) {
-            for (int j = 0; j < y; j++) {
-                // отправлем  клетку   в поток -рост растений
-                int finalI = i;
-                int finalJ = j;
-                Thread thread = new ThreadPlantGrow(PlayingField.cellSet[finalI][finalJ]);
-                thread.start();
-                service.submit(thread);
-            }
-        }
-    }
 
-
-    public void treadLifeSimulation() throws Exception {
+    public static void treadLifeSimulation() throws Exception {
+        Thread threadAnimalLife=null;
         for (int i = 0; i < y; i++) {
             for (int j = 0; j < x; j++) {
-                for (Animal a : PlayingField.cellSet[i][j].zoo) {
-                    Thread thread = new ThreadAnimalLife(a, i, j);
-                    thread.start();
-                    service.submit(thread);
+                if (PlayingField.everybodyDied()){
+                    PanelOfDeath panelOfDeath=new PanelOfDeath();
                 }
-            }
+                    for (Animal a : PlayingField.cellSet[i][j].zoo) {
+                        if (!simulationLivesOn){
+                            ((ThreadAnimalLife) threadAnimalLife).stopServiceDie(); return;}
+                    threadAnimalLife = new ThreadAnimalLife(a, i, j);
+                    threadAnimalLife.start();
+                    serviceLife.submit(threadAnimalLife);
+                    Thread threadPlantGrow= new ThreadPlantGrow(PlayingField.cellSet[i][j]);
+              threadPlantGrow.start();
+              servicePlants.submit(threadPlantGrow);
+               Thread.sleep(10000);
+                   PlayingField.cellSet[i][j].cleanUp();
+                }
+                          }
         }
+       ((ThreadAnimalLife) threadAnimalLife).stopServiceDie();
     }
 
 
-
-    public void simulationCycle() throws InterruptedException {
-        Thread.sleep(10000);
-        simulationLivesOn = false;
+    private static void simulationCycle()  {
+       Thread threadStop=new ThreadStop();
+       threadStop.start();
     }
 
 }

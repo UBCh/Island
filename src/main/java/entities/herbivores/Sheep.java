@@ -79,9 +79,9 @@ public class Sheep extends Animal {
 
     @Override
     public void toDie() {
-	lifeSensor=LifeSensor.DEAD;
+	lifeSensor = LifeSensor.DEAD;
+	System.out.println("сдох   "+name);
     }
-
     @Override
     public int getNumberOfAnimalsInCage() {
 	return numberOfAnimalsInCage;

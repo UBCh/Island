@@ -38,13 +38,13 @@ public class Ark {
 	return animals;
     }
 
-       public void setBuffalo( int numberOfCubsIn,int numberOfStart) {
-	this.buffalo = new Buffalo(numberOfCubsIn,numberOfStart);
-	animals.add(buffalo);
-    }
+       public void setBuffalo(int numberOfCubsIn, int numberOfStart) throws InterruptedException {
+	   this.buffalo = new Buffalo(numberOfCubsIn, numberOfStart);
+	   animals.add(buffalo);
+       }
 
-       public void setCaterpillar(int numberOfCubsIn,int numberOfStart) {
-	this.caterpillar = new Caterpillar(numberOfCubsIn,numberOfStart);
+    public void setCaterpillar(int numberOfCubsIn, int numberOfStart) throws InterruptedException {
+	this.caterpillar = new Caterpillar(numberOfCubsIn, numberOfStart);
 	animals.add(caterpillar);
     }
 

@@ -1,36 +1,48 @@
 package entities.herbivores;
 
-import entities.entitiy.*;
+import entities.entitiy.Animal;
+import entities.entitiy.Appetite;
+import entities.entitiy.LifeSensor;
+import entities.entitiy.Specifications;
 import entities.plants.Plant;
 
 import java.util.TreeMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class Caterpillar  extends Animal {
+public class Caterpillar extends Animal {
 
 
-  public   static String name="Caterpillar";
-
-    public  String getName() {
-	return name;
-    }
-
+    public static String name = "Caterpillar";
     public Specifications specifications;
     public Appetite appetite;
-    int numberOfCubs=2;
-    double mass=0.01;
-    double howMuchFood=1;
-    double foodMass=0;
-    int numberOfAnimalsInCage=200;
-    int speed=0;
-   public LifeSensor lifeSensor;
-    int numberOfStart;
-    TreeMap<Integer,String> probabilityOfEating ;
+    public LifeSensor lifeSensor;
+    private int numberOfCubs = 2;
+    private final double mass = 0.01;
+    private final double howMuchFood = 1;
+    private double foodMass = 0;
+    private final int numberOfAnimalsInCage = 200;
+    private final int speed = 0;
+    private final int numberOfStart;
+    private final TreeMap<Integer, String> probabilityOfEating;
 
-    TreeMap<Integer,String> setProbabilityOfEating(){
-	TreeMap<Integer,String>result= new TreeMap<>();
-	result.putIfAbsent(100,Plant.name);
+
+    public Caterpillar(int numberOfCubsIn, int numberOfStart) {
+	this.specifications = Specifications.PEACEFUL;
+	this.appetite = Appetite.HUNGRY;
+	this.lifeSensor = LifeSensor.ALIVE;
+	this.numberOfCubs = numberOfCubsIn;
+	this.numberOfStart = numberOfStart;
+	this.probabilityOfEating = setProbabilityOfEating();
+    }
+
+    private TreeMap<Integer, String> setProbabilityOfEating() {
+	TreeMap<Integer, String> result = new TreeMap<>();
+	result.putIfAbsent(100, Plant.name);
 	return result;
+    }
+
+    public String getName() {
+	return name;
     }
 
     @Override
@@ -38,23 +50,16 @@ public class Caterpillar  extends Animal {
 	this.appetite = appetite;
     }
 
-    public Caterpillar(int numberOfCubsIn, int numberOfStart) {
-	this.specifications = Specifications.PEACEFUL;
-	this.appetite = Appetite.HUNGRY;
-	this.lifeSensor=LifeSensor.ALIVE;
-	this.numberOfCubs=numberOfCubsIn;
-	this.numberOfStart=numberOfStart;
-	this.probabilityOfEating=setProbabilityOfEating();
-    }
     @Override
     public void moveAround() {
-	appetite=Appetite.HUNGRY;
+	appetite = Appetite.HUNGRY;
     }
 
     @Override
-    public  TreeMap<Integer,String> getProbabilityOfEating() {
+    public TreeMap<Integer, String> getProbabilityOfEating() {
 	return probabilityOfEating;
     }
+
     @Override
         public int getNumberOfCubs() {
 	return numberOfCubs;
@@ -83,13 +88,11 @@ public class Caterpillar  extends Animal {
 	return lifeSensor;
     }
 
-
-
     @Override
     public void toDie() {
-	lifeSensor=LifeSensor.DEAD;
+	lifeSensor = LifeSensor.DEAD;
+	System.out.println("сдох   "+name);
     }
-
 
     @Override
     public int getNumberOfAnimalsInCage() {
@@ -116,12 +119,10 @@ public class Caterpillar  extends Animal {
 	numberOfCubs = numberCubs;
     }
 
-
     @Override
     public void eatUp(double massOfTheVictim) {
 	if (appetite == Appetite.HUNGRY) {
 	    foodMass = foodMass + massOfTheVictim;
-
 	}
 	if (foodMass >= howMuchFood) {
 	    appetite = Appetite.WELL_FED;
@@ -129,16 +130,15 @@ public class Caterpillar  extends Animal {
 	}
     }
 
-
     @Override
-    public CopyOnWriteArrayList<Animal> replicate() {
+    public CopyOnWriteArrayList<Animal> replicate() throws InterruptedException {
 	appetite = Appetite.HUNGRY;
-	CopyOnWriteArrayList<Animal>  animals = new CopyOnWriteArrayList<Animal>();
-	for (int i = 0; i <numberOfCubs ; i++) {
-	    animals.add(new Caterpillar(numberOfCubs,numberOfStart));
+	CopyOnWriteArrayList<Animal> animals = new CopyOnWriteArrayList<Animal>();
+	for (int i = 0; i < numberOfCubs; i++) {
+	    animals.add(new Caterpillar(numberOfCubs, numberOfStart));
+	    System.out.println("убусь до соплей");
 	}
-	appetite = Appetite.HUNGRY;
-	foodMass = 0;
+	lifeSensor = LifeSensor.DEAD;
 	return animals;
     }
 
