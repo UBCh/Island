@@ -4,14 +4,11 @@ import entities.entitiy.Animal;
 import scenarios.Cell;
 import scenarios.PlayingField;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 public class ThreadToDie extends Thread{
 
    private Animal animal;
    Cell cell;
-   private int time= PlayingField.CycleTime * 500;
+    private int time = PlayingField.CycleTime * 500;
 
 
     public ThreadToDie(Animal animal, Cell cell) {

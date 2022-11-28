@@ -20,11 +20,9 @@ public class PanelConfiguration extends JPanel{
     public void start(){
         add(new JLabel("установите рамер поля, установив длину стороны (количество клеток)"));
         JTextField jTextField1 = new JTextField(10);
-        // получаем текс из файла
         add(jTextField1);
         add(new JLabel("установите длительность цикла симуляции(в секундах)"));
         JTextField jTextField2 = new JTextField(10);
-        // получаем текс из файла
         add(jTextField2);
         JButton jButton = new JButton("начнем заселение");
         add(jButton);
@@ -36,7 +34,7 @@ public class PanelConfiguration extends JPanel{
                PanelStart.setVision(false);
                 try {
                     Config config=new Config();
-//                    Simulation simulation=new Simulation();
+                    Simulation simulation=new Simulation();
                     int expected=Simulation.playingField.getCycleTime()*1000;
                     Simulation.playingField.report();
                    PanelIslandState panelTwo=new PanelIslandState();

@@ -10,21 +10,21 @@ public class PanelStart extends JFrame  {
         setLocationByPlatform(true);
         PanelConfiguration panelOne=new PanelConfiguration();
         add(panelOne);
-       if (vision ==false){visible();}
+
 
     }
     public void start(){
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setVisible(true);
+        setVisible(vision);
     }
 
-    public static void setVision(boolean vision) {
-        PanelStart.vision = vision;
+    public static void setVision(boolean vi) {
+
+        vision = vi;
+
     }
 
-    private  void visible(){
-       setVisible(false);
-    }
+
 
 
 }

@@ -23,6 +23,7 @@ public class PanelExpectation {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+                    theFrame.setVisible(false);
                     Simulation.stepSimulation();
                     PanelIslandState panelTwo = new PanelIslandState();
                     panelTwo.start();
