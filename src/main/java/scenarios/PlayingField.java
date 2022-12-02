@@ -96,32 +96,32 @@ public class PlayingField {
 		    iNew = startY - distance;
 		} else {
 		    iNew = 0;
-			    }
-			}
-			case down -> {
-			    if (startY + distance <= sizeOfTheIslandIsVertical - 1) {
-				iNew = startY + distance;
-			    } else {
-				iNew = sizeOfTheIslandIsVertical - 1;
-			    }
-			}
-			case left -> {
-			    if (startX - distance > 0) {
-				jNew = startX - distance;
-			    } else {
-				jNew = 0;
-			    }
-			}
-			case right -> {
-			    if (jNew + distance <= sizeOfTheIslandIsHorizontal - 1) {
-				jNew = startX + distance;
-			    } else {
-				jNew = sizeOfTheIslandIsHorizontal - 1;
-			    }
-			}
-		    }
-		  return moveToAnotherCell(iNew, jNew, animal);
 		}
+	    }
+	    case down -> {
+		if (startY + distance <= sizeOfTheIslandIsVertical - 1) {
+		    iNew = startY + distance;
+		} else {
+		    iNew = sizeOfTheIslandIsVertical - 1;
+		}
+	    }
+	    case left -> {
+		if (startX - distance > 0) {
+		    jNew = startX - distance;
+		} else {
+		    jNew = 0;
+		}
+	    }
+	    case right -> {
+		if (jNew + distance <= sizeOfTheIslandIsHorizontal - 1) {
+		    jNew = startX + distance;
+		} else {
+		    jNew = sizeOfTheIslandIsHorizontal - 1;
+		}
+	    }
+	}
+	return moveToAnotherCell(iNew, jNew, animal);
+    }
 
 
     private Cell moveToAnotherCell(int vertical, int horizontal, Animal animal) {
