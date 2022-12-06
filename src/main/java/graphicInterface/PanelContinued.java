@@ -32,7 +32,7 @@ public  class PanelContinued {
 
 	try {
 
-	 if (PlayingField.everybodyDied()){
+	 if (PlayingField.everyBodyDied()){
 	     PanelOfDeath panelSix = new PanelOfDeath();
 	     panelSix.start();
 

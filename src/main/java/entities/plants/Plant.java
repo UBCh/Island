@@ -1,38 +1,33 @@
 package entities.plants;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
+import java.util.concurrent.CopyOnWriteArrayList;
+
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode
 
 public class Plant {
-    double mass=1;
-    int numberOfAnimalsInCage=200;
-    int numberOfStart;
+    private double mass=1;
+   private   int numberOfAnimalsInCage=200;
+   private   int numberOfStart=200;
 
+    @EqualsAndHashCode.Include
     public static String name="Plant";
 
-    public Plant() {
-    }
 
     public Plant(int numberOfPlantAtTheStart ) {
 	this.numberOfStart=numberOfPlantAtTheStart;
     }
 
-    public String getName() {
-	return name;
-    }
+   public CopyOnWriteArrayList<Plant> replica(){
+       CopyOnWriteArrayList<Plant> plants=new CopyOnWriteArrayList<>();
+      for (int i=0; i<3; i++){plants.add(new Plant());}
+       System.out.println("Plant be fruitful and multiply");
+      return plants;
+   }
 
-    public Plant growing() {
-	return new Plant(numberOfStart);
-    }
-
-    public int getNumberOfAnimalsInCage() {
-	return numberOfAnimalsInCage;
-    }
-
-    public double getMass() {
-	return mass;
-    }
-
-    public int getNumberOfStart() {
-	return numberOfStart;
-    }
 }

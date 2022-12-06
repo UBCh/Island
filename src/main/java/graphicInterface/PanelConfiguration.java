@@ -2,10 +2,11 @@ package graphicInterface;
 
 
 
+import scenarios.PlayingField;
 import simulation.Simulation;
 import simulation.ThreadAnimalLife;
 import simulation.ThreadPlantGrow;
-import start.Config;
+
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -29,11 +30,10 @@ public class PanelConfiguration extends JPanel{
         jButton.addActionListener(new ActionListener( ) {
             @Override
             public void actionPerformed(ActionEvent e) {
-               Config.setSize(Integer.parseInt(jTextField1.getText()));
-               Config.setCycleTime(Integer.parseInt(jTextField2.getText()));
+               PlayingField.setSize(Integer.parseInt(jTextField1.getText()));
+              PlayingField.setCycleTime(Integer.parseInt(jTextField2.getText()));
                PanelStart.setVision(false);
                 try {
-                    Config config=new Config();
                     Simulation simulation=new Simulation();
                     int expected=Simulation.playingField.getCycleTime()*1000;
                     Simulation.playingField.report();

@@ -1,77 +1,29 @@
 package entities.entitiy;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
 import java.util.TreeMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+@Data
+@EqualsAndHashCode
+@NoArgsConstructor
+
 
 public class Animal {
-    public static String name;
-    private Specifications specifications;
+
+    @ConfigurationAnimal( name = "", specifications = Specifications.AGGRESSIVE, mass = 0D, numberOfAnimalsInCage = 0, speed = 0, numberOfStart = 0)
+
     private Appetite appetite;
-   private LifeSensor lifeSensor;
-   private int numberOfStart;
-   private double foodMass;
+    private LifeSensor lifeSensor;
     private int numberOfCubs;
-   private TreeMap<Integer, String> probabilityOfEating;
+    private double howMuchFood;
+    private double foodMass;
+    private TreeMap<Integer, String> probabilityOfEating;
 
-    public void setAppetite(Appetite appetite) {
-	this.appetite = appetite;
-    }
 
-    public void setLifeSensor(LifeSensor lifeSensor) {
-	this.lifeSensor = lifeSensor;
-    }
 
-    public String getName() {
-	return name;
-    }
-
-    public TreeMap<Integer, String> getProbabilityOfEating() {
-	return probabilityOfEating;
-    }
-
-    public Specifications getSpecifications() {
-	return specifications;
-    }
-
-    public Appetite getAppetite() {
-	return appetite;
-
-    }
-
-    public int getNumberOfCubs() {
-	return numberOfCubs;
-    }
-
-    public void setNumberOfCubs(int numberCubs) {
-    }
-
-    public double getFoodMass() {
-	return foodMass;
-    }
-
-    public int getNumberOfStart() {
-	return numberOfStart;
-    }
-
-    public LifeSensor getLifeSensor() {
-	return lifeSensor;
-    }
-
-    public int getNumberOfAnimalsInCage() {
-	return 0;
-    }
-
-    public int getSpeed() {
-	return 0;
-    }
-
-    public Double getMass() {
-	return null;
-    }
-
-    public Double getHowMuchFood() {
-	return null;
-    }
 
     public void eatUp(double mass) {
     }
@@ -85,5 +37,31 @@ public class Animal {
 
     public void toDie()  {
     }
+
+    public void life() {
+      ThreadToDie threadToDie = new ThreadToDie();
+        threadToDie.start();
+    }
+
+
+    public class ThreadToDie extends Thread {
+
+        public ThreadToDie() {
+        }
+
+        @Override
+        public void run() {
+            try {
+                Thread.sleep(60000);
+                appetite=Appetite.WELL_FED;
+                lifeSensor = LifeSensor.DEAD;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("умер от старости");
+            Thread.interrupted();
+        }
+    }
+
 
 }

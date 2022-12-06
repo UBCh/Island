@@ -1,104 +1,42 @@
 package entities.herbivores;
 
-import entities.entitiy.Animal;
-import entities.entitiy.Appetite;
-import entities.entitiy.LifeSensor;
-import entities.entitiy.Specifications;
-import entities.plants.Plant;
+import entities.entitiy.*;
+import lombok.Data;
 
 import java.util.TreeMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+
+@Data
+
+
 public class Duck extends Animal {
 
-    public static String name = "Duck";
-    private LifeSensor lifeSensor;
-    private Specifications specifications;
-    private Appetite appetite;
+    @ConfigurationAnimal(name = "Duck", specifications = Specifications.PEACEFUL, mass = 1D, numberOfAnimalsInCage = 200, speed = 4, numberOfStart = 10)
+    private Appetite appetite = Appetite.HUNGRY;
+    private LifeSensor lifeSensor = LifeSensor.ALIVE;
     private int numberOfCubs = 6;
-    private double mass = 1;
     private double howMuchFood = 0.15;
-    private double foodMass = 0;
-    private int numberOfAnimalsInCage = 200;
-    private int speed = 4;
-    private int numberOfStart;
-    private TreeMap<Integer, String> probabilityOfEating;
+    private double foodMass;
+    private TreeMap<Integer, String> probabilityOfEating = setProbabilityOfEating();
 
-    public Duck(int numberOfCubsIn, int numberOfStart) {
-	this.specifications = Specifications.PEACEFUL;
-	this.appetite = Appetite.HUNGRY;
-	this.lifeSensor = LifeSensor.ALIVE;
-	this.numberOfCubs = numberOfCubsIn;
-	this.numberOfStart = numberOfStart;
-	this.probabilityOfEating = setProbabilityOfEating();
-    }
-
-    public String getName() {
-	return name;
+    public Duck() {
+	life();
     }
 
     private TreeMap<Integer, String> setProbabilityOfEating() {
 	TreeMap<Integer, String> result = new TreeMap<>();
-	result.putIfAbsent(100, Plant.name);
-	result.putIfAbsent(90, Caterpillar.name);
+	result.putIfAbsent(100, "Plant");
+	result.putIfAbsent(90, "Caterpillar");
 	return result;
-    }
-
-    @Override
-    public void setAppetite(Appetite appetite) {
-	this.appetite = appetite;
-    }
-
-    @Override
-    public TreeMap<Integer, String> getProbabilityOfEating() {
-	return probabilityOfEating;
-    }
-
-    @Override
-    public Specifications getSpecifications() {
-	return specifications;
-    }
-
-    @Override
-    public Appetite getAppetite() {
-	return appetite;
-    }
-
-    @Override
-    public LifeSensor getLifeSensor() {
-	return lifeSensor;
     }
 
     @Override
     public void toDie() {
 	lifeSensor = LifeSensor.DEAD;
-	System.out.println("сдох   "+name);
+	System.out.println("dead  Duck");
     }
 
-    @Override
-    public int getNumberOfAnimalsInCage() {
-	return numberOfAnimalsInCage;
-    }
-
-    @Override
-    public int getSpeed() {
-	return speed;
-    }
-
-    @Override
-    public Double getMass() {
-	return mass;
-    }
-
-    @Override
-    public Double getHowMuchFood() {
-	return howMuchFood;
-    }
-
-    @Override
-    public void setNumberOfCubs(int numberCubs) {
-	numberOfCubs = numberCubs;
-    }
 
     @Override
     public void eatUp(double massOfTheVictim) {
@@ -110,33 +48,48 @@ public class Duck extends Animal {
 	    return;
 	}
     }
-    public int getNumberOfCubs() {
-	return numberOfCubs;
-    }
 
-    public double getFoodMass() {
-	return foodMass;
-    }
-
-    public int getNumberOfStart() {
-	return numberOfStart;
-    }
     @Override
     public void moveAround() {
-	appetite=Appetite.HUNGRY;
+	appetite = Appetite.HUNGRY;
     }
 
     @Override
-    public CopyOnWriteArrayList<Animal> replicate() {
-	appetite = Appetite.HUNGRY;
-	CopyOnWriteArrayList<Animal>  animals = new CopyOnWriteArrayList<Animal>();
-	for (int i = 0; i <numberOfCubs ; i++) {
-	    animals.add(new Duck(numberOfCubs,numberOfStart));
-	}
+    public CopyOnWriteArrayList<Animal> replicate() throws Exception {
+	CopyOnWriteArrayList<Animal> animals = new CopyOnWriteArrayList<Animal>();
+	RandomNumbers randomNumbers = new RandomNumbers(numberOfCubs + 1);
+	numberOfCubs = randomNumbers.call();
+	for (int i = 0; i < numberOfCubs; i++) {
+	    animals.add(new Duck());
+		}
+	System.out.println("Duck be fruitful and multiply"+"+"+numberOfCubs);
 	appetite = Appetite.HUNGRY;
 	foodMass = 0;
 	return animals;
     }
 
+    public void life() {
+	ThreadToDie threadToDie = new ThreadToDie();
+	threadToDie.start();
+    }
 
+
+    private class ThreadToDie extends Thread {
+
+	private ThreadToDie() {
+	}
+
+	@Override
+	public void run() {
+	    try {
+		Thread.sleep(120000);
+		appetite = Appetite.WELL_FED;
+		lifeSensor = LifeSensor.DEAD;
+	    } catch (InterruptedException e) {
+		e.printStackTrace();
+	    }
+	    System.out.println("Duck died of old age");
+	    Thread.interrupted();
+	}
+    }
 }

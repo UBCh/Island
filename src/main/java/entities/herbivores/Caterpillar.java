@@ -1,123 +1,43 @@
 package entities.herbivores;
 
-import entities.entitiy.Animal;
-import entities.entitiy.Appetite;
-import entities.entitiy.LifeSensor;
-import entities.entitiy.Specifications;
-import entities.plants.Plant;
+import entities.entitiy.*;
+import lombok.Data;
 
 import java.util.TreeMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+
+@Data
+
+
 public class Caterpillar extends Animal {
 
-
-    public static String name = "Caterpillar";
-    public Specifications specifications;
-    public Appetite appetite;
-    public LifeSensor lifeSensor;
+    @ConfigurationAnimal(name = "Caterpillar", specifications = Specifications.PEACEFUL, mass = 0.01, numberOfAnimalsInCage = 200, speed = 0, numberOfStart = 10)
+    private Appetite appetite = Appetite.HUNGRY;
+    private LifeSensor lifeSensor = LifeSensor.ALIVE;
     private int numberOfCubs = 2;
-    private final double mass = 0.01;
-    private final double howMuchFood = 1;
-    private double foodMass = 0;
-    private final int numberOfAnimalsInCage = 200;
-    private final int speed = 0;
-    private final int numberOfStart;
-    private final TreeMap<Integer, String> probabilityOfEating;
+    private double howMuchFood = 1;
+    private double foodMass;
+    private TreeMap<Integer, String> probabilityOfEating = setProbabilityOfEating();
 
 
-    public Caterpillar(int numberOfCubsIn, int numberOfStart) {
-	this.specifications = Specifications.PEACEFUL;
-	this.appetite = Appetite.HUNGRY;
-	this.lifeSensor = LifeSensor.ALIVE;
-	this.numberOfCubs = numberOfCubsIn;
-	this.numberOfStart = numberOfStart;
-	this.probabilityOfEating = setProbabilityOfEating();
+    public Caterpillar() {
+	life();
     }
 
     private TreeMap<Integer, String> setProbabilityOfEating() {
 	TreeMap<Integer, String> result = new TreeMap<>();
-	result.putIfAbsent(100, Plant.name);
+	result.putIfAbsent(100, "Plant");
 	return result;
     }
 
-    public String getName() {
-	return name;
-    }
-
-    @Override
-    public void setAppetite(Appetite appetite) {
-	this.appetite = appetite;
-    }
-
-    @Override
-    public void moveAround() {
-	appetite = Appetite.HUNGRY;
-    }
-
-    @Override
-    public TreeMap<Integer, String> getProbabilityOfEating() {
-	return probabilityOfEating;
-    }
-
-    @Override
-        public int getNumberOfCubs() {
-	return numberOfCubs;
-    }
-    @Override
-    public double getFoodMass() {
-	return foodMass;
-    }
-    @Override
-    public int getNumberOfStart() {
-	return numberOfStart;
-    }
-
-    @Override
-    public Specifications getSpecifications() {
-	return specifications;
-    }
-
-    @Override
-    public Appetite getAppetite() {
-	return appetite;
-    }
-
-    @Override
-    public LifeSensor getLifeSensor() {
-	return lifeSensor;
-    }
 
     @Override
     public void toDie() {
 	lifeSensor = LifeSensor.DEAD;
-	System.out.println("сдох   "+name);
+	System.out.println("died Caterpillar ");
     }
 
-    @Override
-    public int getNumberOfAnimalsInCage() {
-	return numberOfAnimalsInCage;
-    }
-
-    @Override
-    public int getSpeed() {
-	return speed;
-    }
-
-    @Override
-    public Double getMass() {
-	return mass;
-    }
-
-    @Override
-    public Double getHowMuchFood() {
-	return howMuchFood;
-    }
-
-    @Override
-    public void setNumberOfCubs(int numberCubs) {
-	numberOfCubs = numberCubs;
-    }
 
     @Override
     public void eatUp(double massOfTheVictim) {
@@ -131,16 +51,48 @@ public class Caterpillar extends Animal {
     }
 
     @Override
-    public CopyOnWriteArrayList<Animal> replicate() throws InterruptedException {
+    public void moveAround() {
 	appetite = Appetite.HUNGRY;
+    }
+
+    @Override
+    public CopyOnWriteArrayList<Animal> replicate() throws Exception {
 	CopyOnWriteArrayList<Animal> animals = new CopyOnWriteArrayList<Animal>();
+	RandomNumbers randomNumbers = new RandomNumbers(numberOfCubs + 1);
+	numberOfCubs = randomNumbers.call();
+	;
 	for (int i = 0; i < numberOfCubs; i++) {
-	    animals.add(new Caterpillar(numberOfCubs, numberOfStart));
-	    System.out.println("убусь до соплей");
-	}
-	lifeSensor = LifeSensor.DEAD;
+	    animals.add(new Caterpillar());
+	  	}
+	System.out.println("Caterpillar be fruitful and multiply"+"+"+numberOfCubs);
+	appetite = Appetite.HUNGRY;
+	foodMass = 0;
 	return animals;
     }
 
+    public void life() {
+	ThreadToDie threadToDie = new ThreadToDie();
+	threadToDie.start();
+    }
+
+
+    private class ThreadToDie extends Thread {
+
+	private ThreadToDie() {
+	}
+
+	@Override
+	public void run() {
+	    try {
+		Thread.sleep(120000);
+		appetite = Appetite.WELL_FED;
+		lifeSensor = LifeSensor.DEAD;
+	    } catch (InterruptedException e) {
+		e.printStackTrace();
+	    }
+	    System.out.println("Caterpillar died of old age");
+	    Thread.interrupted();
+	}
+    }
 
 }
