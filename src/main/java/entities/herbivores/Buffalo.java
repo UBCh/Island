@@ -2,6 +2,8 @@ package entities.herbivores;
 
 import entities.entitiy.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.TreeMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -10,7 +12,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Buffalo extends Animal {
 
-    @ConfigurationAnimal(name = "Buffalo", specifications = Specifications.PEACEFUL, mass = 700D, numberOfAnimalsInCage = 10, speed = 3, numberOfStart = 3)
+    @ConfigurationAnimal(name = "Buffalo", specifications = Specifications.PEACEFUL, mass = 700D, numberOfAnimalsInCage = 10, speed = 3, numberOfStart = 5)
     private Appetite appetite = Appetite.HUNGRY;
     private LifeSensor lifeSensor = LifeSensor.ALIVE;
     private int numberOfCubs = 1;
@@ -71,16 +73,13 @@ public class Buffalo extends Animal {
 	threadToDie.start();
     }
 
-
+    @NoArgsConstructor
     private class ThreadToDie extends Thread {
-
-	private ThreadToDie() {
-	}
 
 	@Override
 	public void run() {
 	    try {
-		Thread.sleep(120000);
+		Thread.sleep(60000);
 		appetite = Appetite.WELL_FED;
 		lifeSensor = LifeSensor.DEAD;
 	    } catch (InterruptedException e) {

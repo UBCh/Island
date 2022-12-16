@@ -2,6 +2,7 @@ package entities.predators;
 
 import entities.entitiy.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.TreeMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -12,7 +13,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class Bear extends Animal {
 
 
-    @ConfigurationAnimal(name = "Bear", specifications = Specifications.AGGRESSIVE, mass = 500D, numberOfAnimalsInCage = 50, speed = 2, numberOfStart = 3)
+    @ConfigurationAnimal(name = "Bear", specifications = Specifications.AGGRESSIVE, mass = 500D, numberOfAnimalsInCage = 50, speed = 2, numberOfStart = 5)
     private Appetite appetite = Appetite.HUNGRY;
     private LifeSensor lifeSensor = LifeSensor.ALIVE;
     private int numberOfCubs = 1;
@@ -81,16 +82,14 @@ public class Bear extends Animal {
 	threadToDie.start();
     }
 
-
+    @NoArgsConstructor
     private class ThreadToDie extends Thread {
 
-	private ThreadToDie() {
-	}
 
 	@Override
 	public void run() {
 	    try {
-		Thread.sleep(120000);
+		Thread.sleep(60000);
 		appetite = Appetite.WELL_FED;
 		lifeSensor = LifeSensor.DEAD;
 	    } catch (InterruptedException e) {

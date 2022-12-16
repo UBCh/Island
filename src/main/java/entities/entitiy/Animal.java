@@ -43,11 +43,8 @@ public class Animal {
         threadToDie.start();
     }
 
-
+    @NoArgsConstructor
     public class ThreadToDie extends Thread {
-
-        public ThreadToDie() {
-        }
 
         @Override
         public void run() {

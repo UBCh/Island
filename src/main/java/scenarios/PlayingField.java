@@ -1,37 +1,35 @@
 package scenarios;
 
 import entities.entitiy.Animal;
-import entities.entitiy.Direction;
-import entities.entitiy.RandomNumbers;
 import graphicInterface.PanelIslandState;
-import lombok.Data;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 public class PlayingField {
 
 
     public static PlayingField instance;
-     public static int sizeOfTheIslandIsHorizontal = 0;
-     public static int sizeOfTheIslandIsVertical = 0;
-     public static String conditionForStoppingTheSimulation = "";
-     public static int CycleTime = 0;
-
+    public static int sizeOfTheIslandIsHorizontal = 0;
+    public static int sizeOfTheIslandIsVertical = 0;
+    public static int cycleTime = 0;
+    static ExecutorService serviceLife ;
+    private static boolean barrier = true;
 
     public static Cell[][] cellSet;
 
-    private String[] resultSimulation = new String[0];
+    private static String[] resultSimulation = new String[0];
 
     private PlayingField() throws Exception {
 	createPlayField();
-    }
+	    }
 
 
     public static PlayingField getInstance() throws Exception {
 	if (instance == null) {
-
 	    instance = new PlayingField();
-	}
+	  	}
 	return instance;
     }
 
@@ -41,13 +39,12 @@ public class PlayingField {
 	sizeOfTheIslandIsVertical = siz;
     }
 
-
-    public static void setCycleTime(int cycleTime) {
-	CycleTime = cycleTime;
+    public static int getCycleTime() {
+	return cycleTime;
     }
 
-    public static int getCycleTime() {
-	return CycleTime;
+    public static void setCycleTime(int cycle) {
+	cycleTime = cycle;
     }
 
     private static void createPlayField() throws Exception {
@@ -77,86 +74,44 @@ public class PlayingField {
 	return true;
     }
 
-       public Cell moveAround(Animal animal, int startY, int startX) throws Exception {
-	System.out.println("пинок под жопу с координат " + startY + startX);
-	Cell current = cellSet[startY][startX];
-	int distance = determineDistance(animal);
-	current.zoo.remove(animal);
-	int iNew = startY;
-	int jNew = startX;
-	switch (determineDirection()) {
-	    case up -> { iNew = up(startY,distance);}
-	    case down -> { iNew = down(startY,distance);}
-	    case left -> {jNew =left(startX,distance);}
-	    case right -> {jNew = right(startX,distance);}
-	}
-	return moveToAnotherCell(iNew, jNew, animal);
-    }
+    public static void stopMigration()  {
+		barrier = false;
+	      }
 
-    private int up(int startY, int distance){
-	if (startY - distance > 0) {
-	   return startY - distance;
-	} else {
-	   return  0;
-	}
+    public static void startMigration() {
+	barrier =true;
+	serviceLife = Executors.newFixedThreadPool(100);
+	while (barrier) {
+	    for (int i = 0; i < sizeOfTheIslandIsVertical; i++) {
+		if (!barrier) {
+		    break;
+		}
+		for (int j = 0; j < sizeOfTheIslandIsHorizontal; j++) {
+		    if (!barrier) {
+			break;
+		    }
+		    Cell cell = cellSet[i][j];
+		    for (Animal a : cell.zoo) {
+			if (!barrier) {
+			    break;
+			}
+			// запускаем поток "миграция животного"
+			ThreadMigration threadMigration = new ThreadMigration(a, i, j);
+			threadMigration.start();
+			serviceLife.submit(threadMigration);
+		    }
+		}
 	    }
 
-    private int down(int startY, int distance){
-	if (startY + distance <= sizeOfTheIslandIsVertical - 1) {
-	   return startY + distance;
-	} else {
-	  return sizeOfTheIslandIsVertical - 1;
 	}
-    }
 
-    private int left(int startX, int distance){
-	if (startX - distance > 0) {
-	  return startX - distance;
-	} else {
-	  return  0;
-	}
-    }
-
-    private int right(int startX, int distance){
-	if (startX + distance <= sizeOfTheIslandIsHorizontal - 1) {
-	   return startX + distance;
-	} else {
-	    return sizeOfTheIslandIsHorizontal - 1;
-	}
+	serviceLife.shutdownNow();
     }
 
 
-    private Cell moveToAnotherCell(int vertical, int horizontal, Animal animal) {
-	System.out.println("выбрали направление");
-	cellSet[vertical][horizontal].zoo.add(animal);
-	cellSet[vertical][horizontal].testTread(vertical, horizontal);
-	return cellSet[vertical][horizontal];
-    }
-
-    private int determineDistance(Animal animal) throws Exception {
-	int speed= (int) FabricAnimal.getConfigAnimal(animal, "speed");
-	RandomNumbers randomNumbers = new RandomNumbers(speed + 1);
-	return randomNumbers.call();
-    }
-
-    private Direction determineDirection() throws Exception {
-	RandomNumbers randomNumbers = new RandomNumbers(5);
-	int random = randomNumbers.call();
-	switch (random) {
-	    case 1:
-		return Direction.up;
-	    case 2:
-		return Direction.down;
-	    case 3:
-		return Direction.left;
-	    case 4:
-		return Direction.right;
-	}
-	return null;
-    }
 
 
-    public void report() {
+    public static void report() {
 	String[] tmp;
 	for (int i = 0; i < sizeOfTheIslandIsVertical; i++) {
 	    for (int j = 0; j < sizeOfTheIslandIsHorizontal; j++) {
@@ -168,7 +123,7 @@ public class PlayingField {
 	cleanReport();
     }
 
-    private void getResult(String[] tmp) {
+    private static void getResult(String[] tmp) {
 	String[] strings = new String[resultSimulation.length + tmp.length];
 	for (int i = 0; i < resultSimulation.length; i++) {
 	    strings[i] = resultSimulation[i];
@@ -181,12 +136,43 @@ public class PlayingField {
 	setResultSimulation(strings);
     }
 
-    public void setResultSimulation(String[] resultSimulation) {
-	this.resultSimulation = resultSimulation;
+    public static void setResultSimulation(String[] result) {
+	resultSimulation = result;
     }
 
-    private void cleanReport() {
+
+    private static void cleanReport() {
 	resultSimulation = new String[0];
+    }
+
+
+    private static class ThreadMigration extends Thread {
+
+
+	private int startY;
+	private int startX;
+	private Animal animal;
+	AnimalMigration animalMigration=new AnimalMigration();
+
+
+	private ThreadMigration(Animal animal, int startY, int startX) {
+	    this.startY = startY;
+	    this.startX = startX;
+	    this.animal = animal;
+
+	}
+
+
+	@Override
+	public void run() {
+	    try {
+		animalMigration.moveAround(animal, startY, startX);
+		Thread.interrupted();
+	    } catch (Exception e) {
+		e.printStackTrace();
+	    }
+	}
+
     }
 
 }

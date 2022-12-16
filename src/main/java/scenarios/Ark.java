@@ -3,14 +3,12 @@ package scenarios;
 import entities.entitiy.Animal;
 import entities.herbivores.*;
 import entities.plants.Plant;
-
 import entities.predators.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
-@Data
+@Getter
 
 public class Ark {
 

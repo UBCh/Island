@@ -1,4 +1,4 @@
-package scenarios;
+package entities.entitiy;
 
 import entities.entitiy.Animal;
 import entities.entitiy.ConfigurationAnimal;

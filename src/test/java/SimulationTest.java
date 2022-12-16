@@ -1,11 +1,9 @@
-import entities.entitiy.Animal;
-import entities.herbivores.Buffalo;
+import graphicInterface.PanelContinued;
+import graphicInterface.PanelIslandState;
 import org.junit.jupiter.api.Test;
-import scenarios.Cell;
-import scenarios.FabricAnimal;
 import scenarios.PlayingField;
-import simulation.Simulation;
-import simulation.ThreadAnimalLife;
+
+
 
 
 class SimulationTest {
@@ -13,11 +11,23 @@ class SimulationTest {
     @Test
     void stepSimulation() throws Exception {
 
+ PlayingField.setSize(1);
+PlayingField.setCycleTime(20);
+        PlayingField playingField=PlayingField.getInstance();
+        barrier();
+        playingField.startMigration();
+        playingField.report();
+        PanelIslandState panelTwo = new PanelIslandState();
+        panelTwo.start();
+        PanelContinued panelFo = new PanelContinued();
+        panelFo.start();
 
-   PlayingField.setSize(2);
-   PlayingField.setCycleTime(20);
-   PlayingField playingField=PlayingField.getInstance();
-    Animal animal=playingField.cellSet[0][0].zoo.get(0);
-    playingField.moveAround(animal,0,0);
  }
+
+
+ private void barrier() throws InterruptedException {
+     Thread.sleep(20);
+     PlayingField.stopMigration();
+ }
+
 }

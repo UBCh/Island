@@ -19,13 +19,9 @@ public class Plant {
     public static String name="Plant";
 
 
-    public Plant(int numberOfPlantAtTheStart ) {
-	this.numberOfStart=numberOfPlantAtTheStart;
-    }
-
-   public CopyOnWriteArrayList<Plant> replica(){
+    public CopyOnWriteArrayList<Plant> replica(){
        CopyOnWriteArrayList<Plant> plants=new CopyOnWriteArrayList<>();
-      for (int i=0; i<3; i++){plants.add(new Plant());}
+      for (int i=0; i<20; i++){plants.add(new Plant());}
        System.out.println("Plant be fruitful and multiply");
       return plants;
    }

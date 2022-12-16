@@ -1,20 +1,21 @@
 package scenarios;
 
 import entities.entitiy.Animal;
-import entities.entitiy.Appetite;
+import entities.entitiy.FabricAnimal;
 import entities.entitiy.LifeSensor;
 import entities.entitiy.RandomNumbers;
 import entities.plants.Plant;
 import lombok.Getter;
 
-import java.util.TreeMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Getter
 public class Cell {
-
-    public CopyOnWriteArrayList<Plant> plants = new CopyOnWriteArrayList<>();
-    public CopyOnWriteArrayList<Animal> zoo = new CopyOnWriteArrayList<>();
+    public static CopyOnWriteArrayList<Plant> plants = new CopyOnWriteArrayList<>();
+    public static CopyOnWriteArrayList<Animal> zoo = new CopyOnWriteArrayList<>();
+    static ExecutorService serviceLife = Executors.newFixedThreadPool(100);
     private Ark ark;
 
     public Cell() throws Exception {
@@ -22,18 +23,25 @@ public class Cell {
 	populate();
     }
 
-    private void populate() throws Exception {
-	CopyOnWriteArrayList<Animal> set = ark.getAnimals();
-	int quantity = 0;
-	CopyOnWriteArrayList<Animal> result = new CopyOnWriteArrayList<>();
-	for (Animal o : set) {
-	    quantity = determineCount(o);
-	    for (int i = 1; i <= quantity; i++) {
-		result.add(FabricAnimal.getAnimal(o));
+    public static void die(Animal animal) {
+	animal.toDie();
+	Thread.interrupted();
+    }
+
+    public static void eat(Animal animal) throws InterruptedException {
+	AnimalNutrition animalNutrition = new AnimalNutrition();
+	cleanUp();
+	animalNutrition.feed(animal);
+
+    }
+
+    public static void cleanUp() {
+	zoo.stream().forEach(x -> {
+
+	    if (x.getLifeSensor() == LifeSensor.DEAD) {
+		zoo.remove(x);
 	    }
-	}
-	setZoo(result);
-	setPlants();
+	});
     }
 
     private int determineCount(Animal animal) throws Exception {
@@ -46,6 +54,26 @@ public class Cell {
 	this.zoo = zoo;
     }
 
+    private void populate() throws Exception {
+	setPlants();
+	CopyOnWriteArrayList<Animal> set = ark.getAnimals();
+	int quantity = 0;
+	CopyOnWriteArrayList<Animal> result = new CopyOnWriteArrayList<>();
+	for (Animal o : set) {
+	    quantity = determineCount(o);
+	    for (int i = 1; i <= quantity; i++) {
+		Animal animal = FabricAnimal.getAnimal(o);
+		result.add(animal);
+		// запускаем поток "жизнь животного"
+		ThreadAnimalLife threadAnimalLife = new ThreadAnimalLife(animal);
+		threadAnimalLife.start();
+		serviceLife.submit(threadAnimalLife);
+	    }
+	}
+	setZoo(result);
+
+    }
+// запускаем поток "рост растений"
     private void setPlants() throws Exception {
 	CopyOnWriteArrayList<Plant> result = new CopyOnWriteArrayList<>();
 	int quantity = ark.getPlant().getNumberOfStart();
@@ -54,117 +82,16 @@ public class Cell {
 	    result.add(new Plant());
 	}
 	this.plants = result;
+	ThreadPlantGrow threadPlantGrow = new ThreadPlantGrow();
+	threadPlantGrow.start();
+	serviceLife.submit(threadPlantGrow);
     }
-
-
-    public void eat(Animal animal) throws InterruptedException {
-	System.out.println("хочу жрать");
-	switch (animal.getAppetite()) {
-	    case HUNGRY -> {
-		while (animal.getAppetite() == Appetite.HUNGRY) {
-		    double getFood = getFood(animal);
-		    if (getFood == 0) {
-			break;
-		    }
-		    animal.eatUp(getFood);
-		}
-	    }
-	}
-    }
-
-
-    private double getFood(Animal animal) throws InterruptedException {
-	System.out.println("ищу жрать");
-	//	находим количество вариантов еды для animal
-	TreeMap<Integer, String> map = animal.getProbabilityOfEating();
-	int sizeMap = map.size();
-	int countKey = map.keySet().size(); // количество вариантов еды
-	//	находим ключ мапы- соответсвующий самомому большому проценту вероятности быть съеденным из всех вариантов еды
-	int key = map.lastKey();
-	//	находим "имя"  еды по ключу
-	String value = map.get(key);
-	double food = 0;
-	for (int i = 0; i < sizeMap; i++) {
-	    if (checkAvailability(value)) {
-		food = hunting(value);
-		return food;
-	    } else {
-		if (countKey < 2) {
-		    return 0;
-		}
-		key = animal.getProbabilityOfEating().floorEntry(key - 1).getKey();
-		value = animal.getProbabilityOfEating().get(key);
-		countKey = countKey - 1;
-	    }
-	}
-
-	return 0;
-    }
-
-    private synchronized double hunting(String value) throws InterruptedException {
-
-	double result = 0;
-	//	если такой вид еды есть среди живности в клетке
-	if (value.equals("Plant")) {
-	    //	если value-растение
-	    Plant plant = plants.get(0);
-	    result = plant.getMass();
-	    plants.remove(plant);
-	    System.out.println("поймал и жру");
-	} else {
-	    //	если value-животное
-	    for (Animal a : zoo) {
-		if (value.equals(getParameter(a, "name"))) {
-		    result = (double) getParameter(a, "mass");
-		    die(a);
-		    System.out.println("поймал и жру");
-		    break;
-		}
-	    }
-	}
-	return result;
-    }
-
-
-    private boolean checkAvailability(String name) {
-	if (name.equals("Plant")) {
-	    if (plants.size() != 0) {
-		return true;
-	    }
-	} else {
-	    for (Animal a : zoo) {
-		if (a == null) {
-		    break;
-		} else if (name.equals(getParameter(a, "name"))) {
-		    return true;
-		}
-	    }
-	}
-	return false;
-    }
-
 
     public void replicate(Animal animal) throws Exception {
+	AnimalBreeding animalBreeding = new AnimalBreeding();
 	cleanUp();
-	if (animal.getAppetite() == Appetite.WELL_FED) {
-	    System.out.println("хочу трахаться");
-	    if (findACouple(animal)) {
-		System.out.println("пара есть!!!");
-		int countAnimal = counter(animal);
-		int numberOfCubs = animal.getNumberOfCubs();
-		countAnimal = numberOfCubs + countAnimal;
-		int max = (int) getParameter(animal, "numberOfAnimalsInCage");
-		if (countAnimal <= max) {
-		    System.out.println("процесс пошел");
-		    zoo.addAll(animal.replicate());
-		}
-	    }
-	} else if (animal.getAppetite() == Appetite.HUNGRY) {
-	    eat(animal);
-	}
-	;
+	animalBreeding.reproduction(animal);
     }
-
 
     // отдельный метод рост растений
     public void plantGrow() {
@@ -173,34 +100,16 @@ public class Cell {
 		plants.addAll(plants.get(i).replica());
 	    }
 	}
-	System.out.println("растения растут");
+
     }
-
-
-    private synchronized boolean findACouple(Animal animal) {
-	String name= (String) getParameter(animal,"name");
-	System.out.println(name+"ищу пару");
-	CopyOnWriteArrayList<Animal> choice = new CopyOnWriteArrayList<>();
-	choice.addAll(zoo);
-	choice.remove(animal);
-	for (Animal a : choice) {
-	    if (a.getLifeSensor()==LifeSensor.DEAD){break;}
-	    if (getParameter(a, "name").equals(name)) {
-		System.out.println("вот моя пара"+name);
-		a.setAppetite(Appetite.HUNGRY);
-		return true;
-	    }
-
-	}
-	return false;
-    }
-
 
     public String[] countLiving(int vertical, int horizontal) {
 	String[] result = new String[17];
+	CopyOnWriteArrayList<Plant> plantsCopy = new CopyOnWriteArrayList<>();
+	plantsCopy.addAll(plants);
 	cleanUp();
 	result[0] = "cell with coordinates____________" + vertical + " =vertical  " + horizontal + " =horizontal";
-	result[1] = Plant.name + " - " + plants.size();
+	result[1] = Plant.name + " - " + plantsCopy.size();
 	int i = 2;
 	for (Animal a : ark.getAnimals()) {
 	    result[i] = getParameter(a, "name") + " - " + counter(a);
@@ -209,39 +118,76 @@ public class Cell {
 	return result;
     }
 
-
-    public int counter(Animal animal) {
-           cleanUp();
-	return zoo.stream()
-		.filter(x -> getParameter(x, "name")
-			.equals(getParameter(animal, "name")))
+    public int counter(Animal a) {
+	CopyOnWriteArrayList<Animal> zooCopy = new CopyOnWriteArrayList<>();
+	zooCopy.addAll(zoo);
+	zooCopy = cleanUp(zooCopy);
+	return zooCopy.stream().filter(x -> getParameter(x, "name").
+			equals(getParameter(a, "name")))
 		.toArray()
 		.length;
     }
 
-    public void cleanUp() {
+    private CopyOnWriteArrayList<Animal> cleanUp(CopyOnWriteArrayList<Animal> zoo) {
 	zoo.stream().forEach(x -> {
 
 	    if (x.getLifeSensor() == LifeSensor.DEAD) {
 		zoo.remove(x);
 	    }
 	});
+	return zoo;
     }
 
-    public void testTread(int vertical, int horizontal) {
-	System.out.println("прибежали, координаты " + vertical + horizontal);
-    }
 
-    public void die(Animal animal) {
-
-	animal.toDie();
-    }
 
     private Object getParameter(Animal animal, String config) {
 
 	return FabricAnimal.getConfigAnimal(animal, config);
     }
+
+    private class ThreadPlantGrow extends Thread {
+
+	static boolean stop = true;
+
+	@Override
+	public void run() {
+	    try {
+		while (stop) {
+		    plantGrow();
+		  		}
+	    } catch (Exception e) {
+		e.printStackTrace();
+	    }
+	    Thread.interrupted();
+	}
+    }
+
+    private class ThreadAnimalLife extends Thread {
+
+	Animal animal;
+	private ThreadAnimalLife(Animal animal) {
+	    this.animal = animal;
+	}
+
+
+	@Override
+	public void run() {
+
+	    try {
+		while (animal.getLifeSensor() == LifeSensor.ALIVE) {
+		    System.out.println("жизнь идет" + FabricAnimal.getConfigAnimal(animal, "name"));
+		    eat(animal);
+		    replicate(animal);
+		}
+	    } catch (Exception e) {
+		e.printStackTrace();
+	    }
+	    Thread.interrupted();
+	}
+    }
+
 }
+
 
 
 

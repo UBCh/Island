@@ -1,6 +1,7 @@
 package graphicInterface;
 
-import simulation.Simulation;
+import scenarios.PlayingField;
+
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -8,28 +9,28 @@ import java.awt.event.ActionListener;
 
 public class PanelExpectation {
     static int expected;
+    PlayingField playingField=PlayingField.getInstance();
 
-
-    public PanelExpectation() {
+    public PanelExpectation() throws Exception {
         final JFrame theFrame = new JFrame();
         theFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        theFrame.setTitle("время ожидания окончания симуляции - " + expected + " milliseconds" + "\n");
+        theFrame.setTitle("время ожидания отчета - " + expected + " milliseconds" + "\n");
         theFrame.setSize(600, 150);
         theFrame.setLocation(550, 400);
         theFrame.setVisible(true);
-        JButton jButton = new JButton("start simulation");
+        JButton jButton = new JButton("start \n" +
+                "observations");
         theFrame.add(jButton);
         jButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
                     theFrame.setVisible(false);
-                    Simulation.stepSimulation();
-                    PanelIslandState panelTwo = new PanelIslandState();
-                    panelTwo.start();
-                    PanelContinued panelFo = new PanelContinued();
-                    panelFo.start();
-                } catch (Exception ex) {
+                      report();
+                      playingField.startMigration();
+                      Thread.sleep((long) (expected*0.5));
+                   playingField.stopMigration();
+                                } catch (Exception ex) {
                     ex.printStackTrace();
                 }
 
@@ -38,7 +39,14 @@ public class PanelExpectation {
 
     }
 
+    private void report() throws InterruptedException {
+        Thread.sleep((long) (expected*0.5));
+        playingField.report();
+        PanelIslandState panelTwo = new PanelIslandState();
+        panelTwo.start();
+        PanelContinued panelFo = new PanelContinued();
 
+    }
     public static void setExpected(int exp) {
         expected = exp;
     }
