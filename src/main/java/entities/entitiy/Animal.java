@@ -51,11 +51,10 @@ public class Animal {
             try {
                 Thread.sleep(60000);
                 appetite=Appetite.WELL_FED;
-                lifeSensor = LifeSensor.DEAD;
+                toDie();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            System.out.println("умер от старости");
             Thread.interrupted();
         }
     }

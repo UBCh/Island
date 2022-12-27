@@ -28,8 +28,9 @@ public class AnimalBreeding {
     }
 
     public int counter(Animal a) {
-
-	return Cell.zoo.stream().filter(x -> FabricAnimal.getConfigAnimal(x, "name").equals(FabricAnimal.getConfigAnimal(a, "name"))).toArray().length;
+	return Cell.zoo.stream().filter(x -> FabricAnimal.getConfigAnimal(x, "name")
+		.equals(FabricAnimal.getConfigAnimal(a, "name")))
+		.toArray().length;
     }
 
     private synchronized boolean findACouple(Animal animal) {

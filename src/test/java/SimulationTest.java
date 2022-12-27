@@ -7,7 +7,7 @@ import scenarios.PlayingField;
 
 
 class SimulationTest {
-
+ // временный класс для проверки работы остановки  потоков миграции
     @Test
     void stepSimulation() throws Exception {
 

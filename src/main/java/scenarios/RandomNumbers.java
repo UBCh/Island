@@ -1,4 +1,4 @@
-package entities.entitiy;
+package scenarios;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ThreadLocalRandom;

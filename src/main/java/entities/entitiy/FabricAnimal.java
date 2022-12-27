@@ -12,8 +12,7 @@ import java.lang.reflect.Field;
 public class FabricAnimal {
 
 
-    public static Animal getAnimal(Animal animal)  {
-	String name = (String) getConfigAnimal(animal, "name");
+    public static Animal getAnimal(String name)  {
 	switch (name) {
 	    case "Buffalo":
 		return new Buffalo();
@@ -51,14 +50,14 @@ public class FabricAnimal {
 
 
 
-    public static Object getConfigAnimal(Animal animal, String name) {
+    public static Object getConfigAnimal(Animal animal, String parametr) {
 	Class<? extends Animal> aClass = animal.getClass();
 	Field[] fields = aClass.getDeclaredFields();
 	String result = "";
 	for (Field field : fields) {
 	    ConfigurationAnimal сcf = field.getAnnotation(ConfigurationAnimal.class);
 	    if (!(сcf == null)) {
-		switch (name) {
+		switch (parametr) {
 		    case "name":
 			return сcf.name();
 		    case "speed":

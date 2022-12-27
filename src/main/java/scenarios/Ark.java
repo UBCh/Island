@@ -12,6 +12,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Ark {
 
+//создаем стадартный "набор" животных из которых будет сформирован уникальный для каждой клетки набор  "населения"
     public static Ark instance;
     private CopyOnWriteArrayList<Animal> animals;
     private Plant plant;

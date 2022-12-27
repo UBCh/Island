@@ -2,11 +2,13 @@ package scenarios;
 
 import entities.entitiy.Animal;
 import graphicInterface.PanelIslandState;
+import lombok.Getter;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 
+@Getter
 public class PlayingField {
 
 
@@ -39,13 +41,12 @@ public class PlayingField {
 	sizeOfTheIslandIsVertical = siz;
     }
 
-    public static int getCycleTime() {
-	return cycleTime;
-    }
 
     public static void setCycleTime(int cycle) {
 	cycleTime = cycle;
     }
+
+
 
     private static void createPlayField() throws Exception {
 	cellSet = new Cell[sizeOfTheIslandIsVertical][sizeOfTheIslandIsHorizontal];
@@ -95,7 +96,7 @@ public class PlayingField {
 			if (!barrier) {
 			    break;
 			}
-			// запускаем поток "миграция животного"
+			// запускаем поток "миграция животного" для каждого животно в клетке
 			ThreadMigration threadMigration = new ThreadMigration(a, i, j);
 			threadMigration.start();
 			serviceLife.submit(threadMigration);

@@ -23,8 +23,7 @@ public class AnimalNutrition {
 			break;
 		    }
 		    animal.eatUp(getFood);
-		    System.out.println(FabricAnimal.getConfigAnimal(animal,"name")+"ест");
-		}
+				}
 	    }
 	}
     }

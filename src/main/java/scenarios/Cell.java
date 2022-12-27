@@ -3,7 +3,6 @@ package scenarios;
 import entities.entitiy.Animal;
 import entities.entitiy.FabricAnimal;
 import entities.entitiy.LifeSensor;
-import entities.entitiy.RandomNumbers;
 import entities.plants.Plant;
 import lombok.Getter;
 
@@ -62,7 +61,8 @@ public class Cell {
 	for (Animal o : set) {
 	    quantity = determineCount(o);
 	    for (int i = 1; i <= quantity; i++) {
-		Animal animal = FabricAnimal.getAnimal(o);
+		String name= (String) FabricAnimal.getConfigAnimal(o, "name");
+		Animal animal = FabricAnimal.getAnimal(name);
 		result.add(animal);
 		// запускаем поток "жизнь животного"
 		ThreadAnimalLife threadAnimalLife = new ThreadAnimalLife(animal);
@@ -97,7 +97,7 @@ public class Cell {
     public void plantGrow() {
 	for (int i = 0; i < plants.size(); i++) {
 	    if (plants.size() < 200) {
-		plants.addAll(plants.get(i).replica());
+		plants.addAll(Plant.replica());
 	    }
 	}
 
@@ -175,7 +175,6 @@ public class Cell {
 
 	    try {
 		while (animal.getLifeSensor() == LifeSensor.ALIVE) {
-		    System.out.println("жизнь идет" + FabricAnimal.getConfigAnimal(animal, "name"));
 		    eat(animal);
 		    replicate(animal);
 		}

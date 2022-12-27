@@ -19,7 +19,7 @@ public class PanelExpectation {
         theFrame.setLocation(550, 400);
         theFrame.setVisible(true);
         JButton jButton = new JButton("start \n" +
-                "observations");
+                "migration");
         theFrame.add(jButton);
         jButton.addActionListener(new ActionListener() {
             @Override
@@ -28,9 +28,7 @@ public class PanelExpectation {
                     theFrame.setVisible(false);
                       report();
                       playingField.startMigration();
-                      Thread.sleep((long) (expected*0.5));
-                   playingField.stopMigration();
-                                } catch (Exception ex) {
+                      } catch (Exception ex) {
                     ex.printStackTrace();
                 }
 
@@ -41,6 +39,7 @@ public class PanelExpectation {
 
     private void report() throws InterruptedException {
         Thread.sleep((long) (expected*0.5));
+       playingField.stopMigration();
         playingField.report();
         PanelIslandState panelTwo = new PanelIslandState();
         panelTwo.start();

@@ -3,7 +3,6 @@ package scenarios;
 import entities.entitiy.Animal;
 import entities.entitiy.Direction;
 import entities.entitiy.FabricAnimal;
-import entities.entitiy.RandomNumbers;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor

@@ -19,11 +19,10 @@ public class Plant {
     public static String name="Plant";
 
 
-    public CopyOnWriteArrayList<Plant> replica(){
+    public static CopyOnWriteArrayList<Plant> replica(){
        CopyOnWriteArrayList<Plant> plants=new CopyOnWriteArrayList<>();
       for (int i=0; i<20; i++){plants.add(new Plant());}
-       System.out.println("Plant be fruitful and multiply");
-      return plants;
+        return plants;
    }
 
 }

@@ -3,6 +3,7 @@ package entities.herbivores;
 import entities.entitiy.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import scenarios.RandomNumbers;
 
 import java.util.TreeMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -36,8 +37,7 @@ public class Mouse extends Animal {
     @Override
     public void toDie() {
 	lifeSensor = LifeSensor.DEAD;
-	System.out.println("dead  Mouse");
-    }
+	    }
 
 
     @Override
@@ -64,8 +64,6 @@ public class Mouse extends Animal {
 	for (int i = 0; i < numberOfCubs; i++) {
 	    animals.add(new Mouse());
 	  	}
-	System.out.println("Mouse be fruitful and multiply"+"+"+numberOfCubs);
-
 	appetite = Appetite.HUNGRY;
 	foodMass = 0;
 	return animals;
@@ -84,11 +82,10 @@ public class Mouse extends Animal {
 	    try {
 		Thread.sleep(60000);
 		appetite = Appetite.WELL_FED;
-		lifeSensor = LifeSensor.DEAD;
+		toDie();
 	    } catch (InterruptedException e) {
 		e.printStackTrace();
 	    }
-	    System.out.println("Mouse died of old age");
 	    Thread.interrupted();
 	}
     }

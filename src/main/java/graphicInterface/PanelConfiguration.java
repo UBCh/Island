@@ -38,7 +38,7 @@ public class PanelConfiguration extends JPanel{
                     playingField.report();
                     PanelIslandState panelTwo=new PanelIslandState();
                     panelTwo.start();
-                   int expected=playingField.getCycleTime()*1000;
+                   int expected=(Integer.parseInt(jTextField2.getText()))*1000 ;
                    PanelExpectation.setExpected(expected);
                     PanelExpectation panelExpectation=new PanelExpectation();
                                     } catch (Exception ex) {
