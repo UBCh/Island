@@ -37,9 +37,8 @@ public class PanelExpectation {
 
     }
 
-    private void report() throws InterruptedException {
-        Thread.sleep((long) (expected*0.5));
-       playingField.stopMigration();
+    private void report() throws Exception {
+        playingField.stopMigration();
         playingField.report();
         PanelIslandState panelTwo = new PanelIslandState();
         panelTwo.start();

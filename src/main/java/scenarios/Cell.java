@@ -12,13 +12,15 @@ import java.util.concurrent.Executors;
 
 @Getter
 public class Cell {
+
     public static CopyOnWriteArrayList<Plant> plants = new CopyOnWriteArrayList<>();
     public static CopyOnWriteArrayList<Animal> zoo = new CopyOnWriteArrayList<>();
     static ExecutorService serviceLife = Executors.newFixedThreadPool(100);
-    private Ark ark;
+
+
+    private final String[] ark = new String[]{"Buffalo", "Caterpillar", "Deer", "Duck", "Goat", "Hog", "Horse", "Mouse", "Rabbit", "Sheep", "Bear", "BoaConstrictor", "Eagle", "Fox", "Wolf"};
 
     public Cell() throws Exception {
-	this.ark = Ark.getInstance();
 	populate();
     }
 
@@ -43,11 +45,7 @@ public class Cell {
 	});
     }
 
-    private int determineCount(Animal animal) throws Exception {
-	int numberOfStart = (int) getParameter(animal, "numberOfStart");
-	RandomNumbers randomNumbers = new RandomNumbers(numberOfStart + 1);
-	return randomNumbers.call();
-    }
+
 
     private void setZoo(CopyOnWriteArrayList<Animal> zoo) {
 	this.zoo = zoo;
@@ -55,14 +53,12 @@ public class Cell {
 
     private void populate() throws Exception {
 	setPlants();
-	CopyOnWriteArrayList<Animal> set = ark.getAnimals();
 	int quantity = 0;
 	CopyOnWriteArrayList<Animal> result = new CopyOnWriteArrayList<>();
-	for (Animal o : set) {
-	    quantity = determineCount(o);
+	for (String name : ark) {
+	    Animal animal = FabricAnimal.getAnimal(name);
+	    quantity = determineCount(animal);
 	    for (int i = 1; i <= quantity; i++) {
-		String name= (String) FabricAnimal.getConfigAnimal(o, "name");
-		Animal animal = FabricAnimal.getAnimal(name);
 		result.add(animal);
 		// запускаем поток "жизнь животного"
 		ThreadAnimalLife threadAnimalLife = new ThreadAnimalLife(animal);
@@ -73,10 +69,18 @@ public class Cell {
 	setZoo(result);
 
     }
-// запускаем поток "рост растений"
+
+    private int determineCount(Animal animal) throws Exception {
+	int numberOfStart = (int) getParameter(animal, "numberOfStart");
+	RandomNumbers randomNumbers = new RandomNumbers(numberOfStart + 1);
+	return randomNumbers.call();
+    }
+
+
+    // запускаем поток "рост растений" в каждой клетке при создании
     private void setPlants() throws Exception {
 	CopyOnWriteArrayList<Plant> result = new CopyOnWriteArrayList<>();
-	int quantity = ark.getPlant().getNumberOfStart();
+	int quantity = Plant.getNumberOfStart();
 	quantity = new RandomNumbers(quantity + 1).call();
 	for (int i = 1; i <= quantity; i++) {
 	    result.add(new Plant());
@@ -96,7 +100,7 @@ public class Cell {
     // отдельный метод рост растений
     public void plantGrow() {
 	for (int i = 0; i < plants.size(); i++) {
-	    if (plants.size() < 200) {
+	    if (plants.size() < 180) {
 		plants.addAll(Plant.replica());
 	    }
 	}
@@ -111,19 +115,19 @@ public class Cell {
 	result[0] = "cell with coordinates____________" + vertical + " =vertical  " + horizontal + " =horizontal";
 	result[1] = Plant.name + " - " + plantsCopy.size();
 	int i = 2;
-	for (Animal a : ark.getAnimals()) {
-	    result[i] = getParameter(a, "name") + " - " + counter(a);
+	for (String a : ark) {
+	    result[i] = a + " - " + counter(a);
 	    i++;
 	}
 	return result;
     }
 
-    public int counter(Animal a) {
+    public int counter(String name) {
 	CopyOnWriteArrayList<Animal> zooCopy = new CopyOnWriteArrayList<>();
 	zooCopy.addAll(zoo);
 	zooCopy = cleanUp(zooCopy);
 	return zooCopy.stream().filter(x -> getParameter(x, "name").
-			equals(getParameter(a, "name")))
+			equals(name))
 		.toArray()
 		.length;
     }
@@ -141,9 +145,9 @@ public class Cell {
 
 
     private Object getParameter(Animal animal, String config) {
-
 	return FabricAnimal.getConfigAnimal(animal, config);
     }
+
 
     private class ThreadPlantGrow extends Thread {
 

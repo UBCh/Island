@@ -12,8 +12,8 @@ import java.awt.event.ActionListener;
 
 
 public  class PanelContinued {
-
-    public PanelContinued() {
+ PlayingField playingField=PlayingField.getInstance();
+    public PanelContinued() throws Exception {
 	start();
     }
 
@@ -43,15 +43,9 @@ public  class PanelContinued {
 	     System.exit(0);
 	 }
 	  int expected=PlayingField.cycleTime*1000;
-	  PlayingField.startMigration();
-	 Thread.sleep((long) (expected*0.5));
-	 PlayingField.stopMigration();
-	   PlayingField.report();
-	   PanelIslandState panelTwo = new PanelIslandState();
-	    panelTwo.start();
-	    PanelContinued panelFo = new PanelContinued();
-	    panelFo.start();
-		} catch (Exception ex) {
+	 report();
+	  playingField.startMigration();
+			} catch (Exception ex) {
 		    ex.printStackTrace();
 		}
 
@@ -62,12 +56,23 @@ public  class PanelContinued {
 	jButton2.addActionListener(new ActionListener( ) {
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
-		PlayingField.stopMigration();
+		try {
+		    PlayingField.stopMigration();
+		} catch (InterruptedException ex) {
+		    ex.printStackTrace();
+		}
 		System.exit(0);
 					    }
 	});}
 
 
+    private void report() throws Exception {
+	playingField.stopMigration();
+	playingField.report();
+	PanelIslandState panelTwo = new PanelIslandState();
+	panelTwo.start();
+	PanelContinued panelFo = new PanelContinued();
 
+    }
 
 }

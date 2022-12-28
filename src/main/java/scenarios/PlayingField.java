@@ -1,6 +1,7 @@
 package scenarios;
 
 import entities.entitiy.Animal;
+import entities.entitiy.FabricAnimal;
 import graphicInterface.PanelIslandState;
 import lombok.Getter;
 
@@ -17,7 +18,7 @@ public class PlayingField {
     public static int sizeOfTheIslandIsVertical = 0;
     public static int cycleTime = 0;
     static ExecutorService serviceLife ;
-    private static boolean barrier = true;
+    private static boolean barrier;
 
     public static Cell[][] cellSet;
 
@@ -65,7 +66,7 @@ public class PlayingField {
 	    for (int j = 0; j < sizeOfTheIslandIsHorizontal; j++) {
 		cell = cellSet[i][j];
 		for (Animal a : cell.zoo) {
-		    countLiv = cell.counter(a);
+		    countLiv = cell.counter((String) FabricAnimal.getConfigAnimal(a, "name"));
 		    if (countLiv > 0) {
 			return false;
 		    }
@@ -75,8 +76,9 @@ public class PlayingField {
 	return true;
     }
 
-    public static void stopMigration()  {
-		barrier = false;
+    public static void stopMigration() throws InterruptedException {
+	Thread.sleep(cycleTime*1000);
+	barrier = false;
 	      }
 
     public static void startMigration() {
@@ -96,7 +98,7 @@ public class PlayingField {
 			if (!barrier) {
 			    break;
 			}
-			// запускаем поток "миграция животного" для каждого животно в клетке
+			// запускаем поток "миграция животного" для каждого животного в клетке
 			ThreadMigration threadMigration = new ThreadMigration(a, i, j);
 			threadMigration.start();
 			serviceLife.submit(threadMigration);
