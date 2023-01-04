@@ -55,6 +55,7 @@ public class AnimalNutrition {
 
 	return 0;
     }
+
     private synchronized double hunting(String value)  {
 
 	double result = 0;

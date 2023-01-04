@@ -48,8 +48,7 @@ public class Hog extends Animal {
 	}
 	if (foodMass >= howMuchFood) {
 	    appetite = Appetite.WELL_FED;
-	    return;
-	}
+		}
     }
 
     @Override
@@ -71,23 +70,16 @@ public class Hog extends Animal {
     }
 
     public void life() {
-	ThreadToDie threadToDie = new ThreadToDie();
-	threadToDie.start();
-    }
-
-    @NoArgsConstructor
-    private class ThreadToDie extends Thread {
-
-	@Override
-	public void run() {
+	Runnable task=()->{
 	    try {
 		Thread.sleep(60000);
-		appetite = Appetite.WELL_FED;
-		toDie();
 	    } catch (InterruptedException e) {
 		e.printStackTrace();
 	    }
-	    Thread.interrupted();
-	}
+	    toDie(); };
+	Thread taskTread=new Thread(task);
+	taskTread.start();
+	if (lifeSensor==LifeSensor.DEAD){
+	    taskTread.isInterrupted();}
     }
 }

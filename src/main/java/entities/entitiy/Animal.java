@@ -2,16 +2,13 @@ package entities.entitiy;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.TreeMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 @Data
-@EqualsAndHashCode
-@NoArgsConstructor
-
-
-public class Animal {
+public abstract class Animal {
 
     @ConfigurationAnimal( name = "", specifications = Specifications.AGGRESSIVE, mass = 0D, numberOfAnimalsInCage = 0, speed = 0, numberOfStart = 0)
 
@@ -39,25 +36,8 @@ public class Animal {
     }
 
     public void life() {
-      ThreadToDie threadToDie = new ThreadToDie();
-        threadToDie.start();
-    }
+         }
 
-    @NoArgsConstructor
-    public class ThreadToDie extends Thread {
-
-        @Override
-        public void run() {
-            try {
-                Thread.sleep(60000);
-                appetite=Appetite.WELL_FED;
-                toDie();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            Thread.interrupted();
-        }
-    }
 
 
 }

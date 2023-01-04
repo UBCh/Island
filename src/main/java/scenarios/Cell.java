@@ -26,10 +26,9 @@ public class Cell {
 
     public static void die(Animal animal) {
 	animal.toDie();
-	Thread.interrupted();
-    }
+	    }
 
-    public static void eat(Animal animal) throws InterruptedException {
+    public static void eat(Animal animal)  {
 	AnimalNutrition animalNutrition = new AnimalNutrition();
 	cleanUp();
 	animalNutrition.feed(animal);
@@ -91,14 +90,14 @@ public class Cell {
 	serviceLife.submit(threadPlantGrow);
     }
 
-    public void replicate(Animal animal) throws Exception {
+    public static void replicate(Animal animal) throws Exception {
 	AnimalBreeding animalBreeding = new AnimalBreeding();
 	cleanUp();
 	animalBreeding.reproduction(animal);
     }
 
     // отдельный метод рост растений
-    public void plantGrow() {
+    public static void plantGrow() {
 	for (int i = 0; i < plants.size(); i++) {
 	    if (plants.size() < 180) {
 		plants.addAll(Plant.replica());
@@ -149,45 +148,9 @@ public class Cell {
     }
 
 
-    private class ThreadPlantGrow extends Thread {
-
-	static boolean stop = true;
-
-	@Override
-	public void run() {
-	    try {
-		while (stop) {
-		    plantGrow();
-		  		}
-	    } catch (Exception e) {
-		e.printStackTrace();
-	    }
-	    Thread.interrupted();
-	}
-    }
-
-    private class ThreadAnimalLife extends Thread {
-
-	Animal animal;
-	private ThreadAnimalLife(Animal animal) {
-	    this.animal = animal;
-	}
 
 
-	@Override
-	public void run() {
 
-	    try {
-		while (animal.getLifeSensor() == LifeSensor.ALIVE) {
-		    eat(animal);
-		    replicate(animal);
-		}
-	    } catch (Exception e) {
-		e.printStackTrace();
-	    }
-	    Thread.interrupted();
-	}
-    }
 
 }
 

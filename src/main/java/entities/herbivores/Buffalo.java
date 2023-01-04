@@ -2,7 +2,6 @@ package entities.herbivores;
 
 import entities.entitiy.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import scenarios.RandomNumbers;
 
 import java.util.TreeMap;
@@ -42,10 +41,9 @@ public class Buffalo extends Animal {
     public void eatUp(double massOfTheVictim) {
 	if (appetite == Appetite.HUNGRY) {
 	    foodMass = foodMass + massOfTheVictim;
-	}
+	 	}
 	if (foodMass >= howMuchFood) {
 	    appetite = Appetite.WELL_FED;
-	    return;
 	}
     }
 
@@ -68,23 +66,19 @@ public class Buffalo extends Animal {
     }
 
     public void life() {
-	ThreadToDie threadToDie = new ThreadToDie();
-	threadToDie.start();
-    }
-
-    @NoArgsConstructor
-    private class ThreadToDie extends Thread {
-
-	@Override
-	public void run() {
+	Runnable task = () -> {
 	    try {
 		Thread.sleep(60000);
-		appetite = Appetite.WELL_FED;
-		toDie();
 	    } catch (InterruptedException e) {
 		e.printStackTrace();
 	    }
-	    Thread.interrupted();
+	    toDie();
+	};
+	Thread taskTread = new Thread(task);
+	taskTread.start();
+	if (lifeSensor == LifeSensor.DEAD) {
+	    taskTread.isInterrupted();
 	}
     }
+
 }
