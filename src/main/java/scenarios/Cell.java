@@ -5,6 +5,8 @@ import entities.entitiy.FabricAnimal;
 import entities.entitiy.LifeSensor;
 import entities.plants.Plant;
 import lombok.Getter;
+import streams.ThreadAnimalLife;
+import streams.ThreadPlantGrow;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;

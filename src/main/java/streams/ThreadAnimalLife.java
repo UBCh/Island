@@ -1,7 +1,8 @@
-package scenarios;
+package streams;
 
 import entities.entitiy.Animal;
 import entities.entitiy.LifeSensor;
+import scenarios.Cell;
 
 public class ThreadAnimalLife extends Thread{
 

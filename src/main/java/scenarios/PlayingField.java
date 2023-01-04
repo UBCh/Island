@@ -4,6 +4,7 @@ import entities.entitiy.Animal;
 import entities.entitiy.FabricAnimal;
 import graphicInterface.PanelIslandState;
 import lombok.Getter;
+import streams.ThreadMigration;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

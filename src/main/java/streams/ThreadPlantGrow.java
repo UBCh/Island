@@ -1,4 +1,6 @@
-package scenarios;
+package streams;
+
+import scenarios.Cell;
 
 public class ThreadPlantGrow extends Thread{
 

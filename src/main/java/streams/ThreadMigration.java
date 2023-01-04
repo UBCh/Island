@@ -1,6 +1,7 @@
-package scenarios;
+package streams;
 
 import entities.entitiy.Animal;
+import scenarios.AnimalMigration;
 
 public class ThreadMigration extends Thread {
 
